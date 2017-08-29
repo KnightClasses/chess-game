@@ -1,0 +1,2 @@
+# FactoryGirl stuff goes here!
+
