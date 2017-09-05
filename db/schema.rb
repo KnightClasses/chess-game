@@ -16,9 +16,13 @@ ActiveRecord::Schema.define(version: 20170903232917) do
   enable_extension "plpgsql"
 
   create_table "games", force: :cascade do |t|
-    t.text     "players",    default: [],              array: true
-    t.datetime "created_at",              null: false
-    t.datetime "updated_at",              null: false
+    t.string   "name"
+    t.integer  "white_player"
+    t.integer  "black_player"
+    t.datetime "created_at",   null: false
+    t.datetime "updated_at",   null: false
+    t.index ["black_player"], name: "index_games_on_black_player", using: :btree
+    t.index ["white_player", "black_player"], name: "index_games_on_white_player_and_black_player", using: :btree
   end
 
   create_table "pieces", force: :cascade do |t|
@@ -30,13 +34,6 @@ ActiveRecord::Schema.define(version: 20170903232917) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["game_id"], name: "index_pieces_on_game_id", using: :btree
-  end
-
-  create_table "players", force: :cascade do |t|
-    t.string   "name"
-    t.string   "color"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
   end
 
   create_table "users", force: :cascade do |t|
