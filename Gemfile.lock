@@ -55,7 +55,7 @@ GEM
     coffee-script (2.4.1)
       coffee-script-source
       execjs
-    coffee-script-source (1.12.2)
+    coffee-script-source (1.8.0)
     concurrent-ruby (1.0.5)
     devise (4.2.1)
       bcrypt (~> 3.0)
@@ -207,6 +207,7 @@ DEPENDENCIES
   bootstrap (= 4.0.0.alpha6)
   byebug
   coffee-rails (~> 4.2)
+  coffee-script-source (= 1.8.0)
   devise
   factory_girl_rails (~> 4.0)
   jbuilder (~> 2.5)
