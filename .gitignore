@@ -15,3 +15,8 @@
 
 # Ignore Byebug command history file.
 .byebug_history
+
+# Ignoring my temp swp files [Kevin]
+*~
+*.swp
+*.swo
