@@ -17,6 +17,9 @@
         <li class="nav-item">
           <%= link_to "New Game", "#", data:{toggle:"modal", target:"#myModal"}, class: "nav-link"%>
         </li>
+        <li class="nav-item">
+          <%= link_to "Join a Game", "#", data:{toggle:"modal", target:"#listGamesModal"}, class: "nav-link"%>
+        </li>
       <% else %>
         <li class="nav-item">
           <%= link_to 'Sign in', new_user_session_path, class: 'nav-link' %>
@@ -26,14 +29,6 @@
       </li>
     </ul>
   </nav>
-
-
-
-
-
-
-
-
 
       <% end %>
     </ul>
@@ -47,7 +42,6 @@
     <% if alert.present? %>
       <p class="alert alert-danger"><%= alert %></p>
     <% end %>
-
 
 
     <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
@@ -71,7 +65,33 @@
         </div>
       </div>
     </div>
-  </div>
+
+
+    <div class="modal fade" id="listGamesModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+            <h4 class="modal-title" id="myModalLabel">Available games to join: </h4>
+          </div>
+
+
+          <% Game.all.each do |game| %>
+            <% if ( !game.black_player &&  !(current_user.id == game.user_id) )%>
+              <!-- second conditional currently does not work unless user is already signed in -->
+              <h4>Player <%= game.user_id %> is waiting for an opponent.</h4>
+              <!-- change to username and game room name later -->
+              <span><%= link_to "Join this game", game_path(game), class: 'btn btn-primary btn-large' %></span>
+              <br />
+
+            <% end %>
+          <% end %>
+
+
+          </div>
+        </div>
+      </div>
+    </div>
 
   <%= yield %>
 
