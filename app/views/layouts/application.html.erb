@@ -77,9 +77,9 @@
 
 
           <% Game.all.each do |game| %>
-            <% if ( !game.black_player &&  !(current_user.id == game.user_id) )%>
-              <!-- second conditional currently does not work unless user is already signed in -->
-              <h4>Player <%= game.user_id %> is waiting for an opponent.</h4>
+            <% if ( !game.black_player_id && !(current_user.id == game.white_player_id) ) %>
+
+              <h4>Player <%= game.white_player_id %> is waiting for an opponent.</h4>
               <!-- change to username and game room name later -->
               <span><%= link_to "Join this game", game_path(game), class: 'btn btn-primary btn-large' %></span>
               <br />
