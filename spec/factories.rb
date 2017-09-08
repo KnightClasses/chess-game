@@ -9,14 +9,12 @@ FactoryGirl.define do
 
   factory :game do
     name "awesome game"
-    white_player 1
-    black_player 2
+    black_player_id 2
     association :user
   end
 
   factory :piece do
-    id 1
-    color "white"
+    color 0
     #The type will be king by default
     type King
     x 1

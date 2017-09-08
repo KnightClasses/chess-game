@@ -25,7 +25,7 @@ RSpec.describe GamesController, type: :controller do
       expect(response).to redirect_to game_path("#{Game.last.id}")
       game = Game.last
       expect(game.name).to eq("Hello")
-      expect(game.user).to eq(user)
+      expect(game.white_player_id).to eq(user.id)
     end
   end
 end
