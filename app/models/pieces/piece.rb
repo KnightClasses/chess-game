@@ -66,8 +66,10 @@ class Piece < ApplicationRecord
         end
       end
 
-    else # invalid (temporarily disregarding knight)
-      puts "invalid"
+    else # invalid move (temporarily disregarding knight)
+      return "invalid move"
     end
+
+    return false
   end
 end
