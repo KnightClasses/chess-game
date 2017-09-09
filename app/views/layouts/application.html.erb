@@ -75,21 +75,17 @@
             <h4 class="modal-title" id="myModalLabel">Available games to join: </h4>
           </div>
 
-
-          <% Game.all.each do |game| %>
-            <% if current_user %>
+          <% if current_user %>
+            <% Game.all.each do |game| %>
               <% if ( !game.black_player_id && !(current_user.id == game.white_player_id) ) %>
-
                 <h4>Player <%= game.white_player_id %> is waiting for an opponent.</h4>
                 <!-- change to username and game room name later -->
                 <span><%= link_to "Join this game", game_path(game), class: 'btn btn-primary btn-large' %></span>
                 <br />
-
               <% end %>
             <% end %>
           <% end %>
-
-
+          
           </div>
         </div>
       </div>
