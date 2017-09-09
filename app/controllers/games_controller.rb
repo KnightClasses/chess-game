@@ -15,7 +15,6 @@ class GamesController < ApplicationController
 
   def show
     @game = Game.find(params[:id])
-    @pawns = Pawn.all
   end
 
   private
