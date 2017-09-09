@@ -78,7 +78,7 @@
           <% if current_user %>
             <% Game.all.each do |game| %>
               <% if ( !game.black_player_id && !(current_user.id == game.white_player_id) ) %>
-                <h4>Player <%= game.white_player_id %> is waiting for an opponent.</h4>
+                <h4>Player <%= game.white_player_id %> is waiting for an opponent in room "<%= game.name %>."</h4>
                 <!-- change to username and game room name later -->
                 <span><%= link_to "Join this game", game_path(game), method: :update, class: 'btn btn-primary btn-large' %></span>
                 <br />
