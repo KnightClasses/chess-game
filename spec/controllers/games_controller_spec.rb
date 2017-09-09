@@ -28,4 +28,16 @@ RSpec.describe GamesController, type: :controller do
       expect(game.white_player_id).to eq(user.id)
     end
   end
+
+  describe "game#update action" do
+    it "should allow for a user to join(update black_player_id) a game" do
+      game = FactoryGirl.create(:game)
+      user = FactoryGirl.create(:user)
+      sign_in user
+      patch :update, params: { id: game.id, game: { black_player_id: user.id } }
+      game.reload
+      expect(game.black_player_id).to eq(user.id)
+    end
+  end
+
 end

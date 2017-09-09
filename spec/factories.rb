@@ -9,7 +9,7 @@ FactoryGirl.define do
 
   factory :game do
     name "awesome game"
-    black_player_id 2
+    white_player_id 1
     association :user
   end
 
