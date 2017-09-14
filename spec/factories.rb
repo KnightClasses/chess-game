@@ -17,8 +17,8 @@ FactoryGirl.define do
     color 0
     #The type will be king by default
     type King
-    x 1
-    y 1
+    x 3
+    y 3
     association :game
   end
 end
