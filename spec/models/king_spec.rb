@@ -16,8 +16,8 @@ RSpec.describe King, type: :model do
       FactoryGirl.create(:piece) # piece type is king by default
       king1 = Piece.last
 
-      expect(king1.is_valid?(2, 1)).to eq(true)
-      expect(king1.is_valid?(1, 2)).to eq(true)
+      expect(king1.is_valid?(4, 3)).to eq(true)
+      expect(king1.is_valid?(3, 4)).to eq(true)
     end
 
     it "should successfully detect if a move is not valid" do 
@@ -26,7 +26,7 @@ RSpec.describe King, type: :model do
 
       expect(king1.is_valid?(3, 1)).to eq(false)
       expect(king1.is_valid?(1, 3)).to eq(false)
-      expect(king1.is_valid?(2, 3)).to eq(false)
+      expect(king1.is_valid?(2, 5)).to eq(false)
     end
   end
 end
