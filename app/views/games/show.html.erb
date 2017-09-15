@@ -9,7 +9,11 @@
       <%# on odd numbered rows, alternate between white and black, starting with white %>
       <% if y % 2 == 1 %>
         <% if x % 2 == 0 %>
-          <div class='white' id=<%= "#{x}-#{y}" %>></div>
+          <% piece = Piece.where("x = ? AND y = ? AND game_id = ?", x, y, 46) %>
+          <% j = 99 %>
+          <%= link_to 'test', game_piece_path(@game, j) if piece.present? do %>
+          <div class='white' id=<%= "#{x}-#{y}" %>>white even</div>
+          <% end %>
         <% else %>
           <div class='black' id=<%= "#{x}-#{y}" %>></div>
         <% end %>

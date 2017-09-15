@@ -1,1 +1,2 @@
-<%= Piece.last.id %>
+<% piece = Piece.last %>
+<%= "#{piece.id}, #{piece.type}, #{piece.color}" %>
