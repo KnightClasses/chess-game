@@ -40,7 +40,9 @@
           <% piece_type = Piece.where("x = ? AND y = ?", x, y).first.type.downcase %>
 
           <!-- show the image -->
-          <%= image_tag("#{piece_color}_#{piece_type}", height: '90', width: '90') %>
+          <div class="pieces">
+            <%= image_tag("#{piece_color}_#{piece_type}", height: '90', width: '90') %>
+          </div>
         <% end %>
       </div>
 
