@@ -27,11 +27,14 @@
       <!-- is there an image? -->
         <% if Piece.where("x = #{x} AND y = #{y}").first %>
       <!-- what piece is it? -->
-          <%= Piece.where("x = #{x} AND y = #{y}").first.color %>
-          <%= Piece.where("x = #{x} AND y = #{y}").first.type %>
+          <% piece_color = Piece.where("x = #{x} AND y = #{y}").first.color.downcase %>
+          <% piece_type = Piece.where("x = #{x} AND y = #{y}").first.type.downcase %>
+      <!-- show the image -->
+          <div class = "pieces">
+            <%= image_tag("#{piece_color}_#{piece_type}", height: '90', width: '90') %>
+          </div>
         <% end %>
       </div>
-
     <% end %>
     </div>
   <% end %>
