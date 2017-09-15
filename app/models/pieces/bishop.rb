@@ -3,4 +3,7 @@ class Bishop < Piece
   def check
     return "This is the bishop"
   end
+
+
+
 end

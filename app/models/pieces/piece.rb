@@ -2,6 +2,16 @@ class Piece < ApplicationRecord
   belongs_to :game
 
   enum color: {white: 0, black: 1}
+  enum role: {
+    pawn: 1,
+    rook: 2,
+    knight: 3,
+    bishop: 4,
+    queen: 5,
+    king: 6
+  }
+
+  # rook = Piece.create(id: 1, color: 0, role: 2, x: 1, y:1)
 
   # req_x and req_y are coordinates/integers
   def is_obstructed?(req_x, req_y)

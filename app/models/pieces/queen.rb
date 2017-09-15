@@ -3,4 +3,5 @@ class Queen < Piece
   def check
     return "This is the queen"
   end
+
 end

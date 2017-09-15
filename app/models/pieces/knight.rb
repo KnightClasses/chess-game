@@ -3,4 +3,5 @@ class Knight < Piece
   def check
     return "This is the knight"
   end
+  
 end
