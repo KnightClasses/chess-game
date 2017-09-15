@@ -21,8 +21,17 @@
       <% cell_color = "white" %>
         <% end %>
       <% end %>
+
       <div class=<%= cell_color %> id=<%= "#{x}-#{y}" %>>
+
+      <!-- is there an image? -->
+        <% if Piece.where("x = #{x} AND y = #{y}").first %>
+      <!-- what piece is it? -->
+          <%= Piece.where("x = #{x} AND y = #{y}").first.color %>
+          <%= Piece.where("x = #{x} AND y = #{y}").first.type %>
+        <% end %>
       </div>
+
     <% end %>
     </div>
   <% end %>
