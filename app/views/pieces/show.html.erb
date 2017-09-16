@@ -11,16 +11,24 @@
       <%# on odd numbered rows, alternate between white and black, starting with white %>
       <% if y % 2 == 1 %>
         <% if x % 2 == 0 %>
+          <%= link_to game_piece_path( x: x, y: y ), :method => :patch do %>
             <div class='white' id=<%= "#{x}-#{y}" %>></div>
+          <% end %>
         <% else %>
+          <%= link_to game_piece_path( x: x, y: y ), :method => :patch do %>
             <div class='black' id=<%= "#{x}-#{y}" %>></div>
+          <% end %>
         <% end %>
       <% else %>
         <%# on even numbered rows, alternate between white and black, starting with black %>
         <% if x % 2 == 0 %>
+          <%= link_to game_piece_path( x: x, y: y ), :method => :patch do %>
           <div class='black' id=<%= "#{x}-#{y}" %>></div>
+          <% end %>
         <% else %>
+          <%= link_to game_piece_path( x: x, y: y ), :method => :patch do %>
           <div class='white' id=<%= "#{x}-#{y}" %>></div>
+          <% end %>
         <% end %>
       <% end %>
     <% end %>

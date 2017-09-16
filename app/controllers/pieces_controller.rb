@@ -1,6 +1,7 @@
 class PiecesController < ApplicationController
   def show
     @piece = Piece.find(params[:id])
+    @game =@piece.game
   end
 
   def update
@@ -13,6 +14,6 @@ class PiecesController < ApplicationController
 
   private
   def piece_params
-    params.require(:piece).permit(:type, :x, :y)
+    params.require(:piece).permit(:x, :y)
   end
 end
