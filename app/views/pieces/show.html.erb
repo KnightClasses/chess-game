@@ -29,3 +29,11 @@
     </div>
   <% end %>
 </div>
+
+<script>
+  var x = <%= @piece.x %>
+  var y = <%= @piece.y %>
+  var xy = x + '-' + y
+  var pieceXY = $('#' + xy);
+  $( "div" ).find( pieceXY ).css( "border", "red solid 5px" );
+</script>
