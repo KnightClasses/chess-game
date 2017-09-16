@@ -1,2 +1,31 @@
-<%= @piece.id %>
-<%= @piece.type %>
+<h1><%= @piece.type %> <%= "x = " + "#{@piece.x}, " %> <%= " y = " + "#{@piece.y}" %></h1>
+<!-- add .white#highlight style to piece xy -->
+
+<!-- make each div clickable; update x,y of piece when clicked -->
+<!-- link_to "test", controller: "pieces", action: "update" -->
+
+<div class='board'>
+  <%# establishes the vertical dimension of the board %>
+  <% 8.downto(1) do |y| %>
+    <div class='row'>
+    <%# establishes the horizontal dimension of the board %>
+    <% 1.upto(8) do |x| %>
+      <%# on odd numbered rows, alternate between white and black, starting with white %>
+      <% if y % 2 == 1 %>
+        <% if x % 2 == 0 %>
+            <div class='white' id=<%= "#{x}-#{y}" %>></div>
+        <% else %>
+            <div class='black' id=<%= "#{x}-#{y}" %>></div>
+        <% end %>
+      <% else %>
+        <%# on even numbered rows, alternate between white and black, starting with black %>
+        <% if x % 2 == 0 %>
+          <div class='black' id=<%= "#{x}-#{y}" %>></div>
+        <% else %>
+          <div class='white' id=<%= "#{x}-#{y}" %>></div>
+        <% end %>
+      <% end %>
+    <% end %>
+    </div>
+  <% end %>
+</div>
