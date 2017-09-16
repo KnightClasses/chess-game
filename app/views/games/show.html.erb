@@ -12,8 +12,12 @@
           <% req_x = x %>
           <% req_y = y %>
           <% piece = @game.pieces.find_by(x: req_x, y: req_y) %>
-          <%= link_to 'test', game_piece_path(@game, piece) if piece.present? do %>
-          <div class='white' id=<%= "#{x}-#{y}" %>>white even</div>
+          <% if piece.present? %>
+            <%= link_to game_piece_path(@game, piece) do %>
+              <div class='white' id=<%= "#{x}-#{y}" %>></div>
+            <% end %>
+          <% else %>
+            <div class='white' id=<%= "#{x}-#{y}" %>></div>
           <% end %>
         <% else %>
           <div class='black' id=<%= "#{x}-#{y}" %>></div>
@@ -21,7 +25,16 @@
       <% else %>
         <%# on even numbered rows, alternate between white and black, starting with black %>
         <% if x % 2 == 0 %>
-          <div class='black' id=<%= "#{x}-#{y}" %>></div>
+          <% req_x = x %>
+          <% req_y = y %>
+          <% piece = @game.pieces.find_by(x: req_x, y: req_y) %>
+          <% if piece.present? %>
+            <%= link_to game_piece_path(@game, piece) do %>
+              <div class='black' id=<%= "#{x}-#{y}" %>></div>
+            <% end %>
+          <% else %>
+            <div class='black' id=<%= "#{x}-#{y}" %>></div>
+          <% end %>
         <% else %>
           <div class='white' id=<%= "#{x}-#{y}" %>></div>
         <% end %>

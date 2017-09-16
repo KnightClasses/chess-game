@@ -13,6 +13,6 @@ class PiecesController < ApplicationController
 
   private
   def piece_params
-    params.require(:piece).permit(:color, :type, :x, :y)
+    params.require(:piece).permit(:type, :x, :y)
   end
 end
