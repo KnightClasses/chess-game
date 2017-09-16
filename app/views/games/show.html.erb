@@ -10,28 +10,41 @@
       <% if y % 2 == 1 %>
         <% if x % 2 == 0 %>
           <% cell_color = "white" %>
+          <% req_x = x %>
+          <% req_y = y %>
         <% else %>
           <% cell_color = "grey" %>
+          <% req_x = x %>
+          <% req_y = y %>
         <% end %>
       <% else %>
         <%# on even numbered rows, alternate between white and black, starting with black %>
         <% if x % 2 == 0 %>
           <% cell_color = "grey" %>
+          <% req_x = x %>
+          <% req_y = y %>
         <% else %>
-      <% cell_color = "white" %>
+          <% cell_color = "white" %>
+          <% req_x = x %>
+          <% req_y = y %>
         <% end %>
       <% end %>
 
-      <div class=<%= cell_color %> id=<%= "#{x}-#{y}" %>>
-        <% piece = Piece.find_by("x = ? AND y = ? AND game_id = ?", x, y, @game.id) %>
-        <% if piece %>
-          <% piece_color = piece.color.downcase %>
-          <% piece_type = piece.type.downcase %>
-          <div class="pieces">
-            <%= image_tag("#{piece_color}_#{piece_type}", height: '90', width: '90') %>
-          </div>
+      <% piece = @game.pieces.find_by(x: req_x, y: req_y) %>
+        <% if piece.present? %>
+          <%= link_to game_piece_path(@game, piece) do %>
+            <div class=<%= cell_color %> id=<%= "#{x}-#{y}" %>>
+              <% piece_color = piece.color.downcase %>
+              <% piece_type = piece.type.downcase %>
+
+              <div class="pieces">
+                <%= image_tag("#{piece_color}_#{piece_type}", height: '90', width: '90') %>
+              </div>
+            </div>
+          <% end %>
+        <% else %>
+          <div class=<%= cell_color %> id=<%= "#{x}-#{y}" %>></div>
         <% end %>
-      </div>
 
     <% end %>
     </div>
