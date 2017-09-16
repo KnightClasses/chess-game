@@ -9,9 +9,10 @@
       <%# on odd numbered rows, alternate between white and black, starting with white %>
       <% if y % 2 == 1 %>
         <% if x % 2 == 0 %>
-          <% piece = Piece.where("x = ? AND y = ? AND game_id = ?", x, y, 46) %>
-          <% j = 99 %>
-          <%= link_to 'test', game_piece_path(@game, j) if piece.present? do %>
+          <% req_x = x %>
+          <% req_y = y %>
+          <% piece = @game.pieces.find_by(x: req_x, y: req_y) %>
+          <%= link_to 'test', game_piece_path(@game, piece) if piece.present? do %>
           <div class='white' id=<%= "#{x}-#{y}" %>>white even</div>
           <% end %>
         <% else %>
