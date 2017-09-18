@@ -22,6 +22,7 @@ RSpec.describe PiecesController, type: :controller do
       req_y = piece.y + 1
       patch :update, params: { game_id: game.id, id: piece.id, piece: { x: req_x, y: req_y } }
       game.reload
+      piece.reload
       expect(piece.x).to eq(req_x)
       expect(piece.y).to eq(req_y)
       expect(response).to redirect_to game_path(game.id)
