@@ -32,17 +32,18 @@
 
       <% piece = @game.pieces.find_by(x: req_x, y: req_y) %>
         <% if piece.present? %>
+        <%# if piece present at x-y, create: cell color/id div, div link and piece image %>
           <%= link_to game_piece_path(@game, piece) do %>
             <div class=<%= cell_color %> id=<%= "#{x}-#{y}" %>>
-              <% piece_color = piece.color.downcase %>
-              <% piece_type = piece.type.downcase %>
-
               <div class="pieces">
+                <% piece_color = piece.color.downcase %>
+                <% piece_type = piece.type.downcase %>
                 <%= image_tag("#{piece_color}_#{piece_type}", height: '90', width: '90') %>
               </div>
             </div>
           <% end %>
         <% else %>
+        <%# if piece not present at x-y, create: cell color/id div and div link %>
           <div class=<%= cell_color %> id=<%= "#{x}-#{y}" %>></div>
         <% end %>
 

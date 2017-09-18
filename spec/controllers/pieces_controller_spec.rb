@@ -17,13 +17,14 @@ RSpec.describe PiecesController, type: :controller do
       user = FactoryGirl.create(:user)
       sign_in user
       game = FactoryGirl.create(:game)
-      piece = Piece.last
-      req_x = 4
-      req_y = 4
+      piece = Piece.find_by(x: 1, y: 2)
+      req_x = piece.x
+      req_y = piece.y + 1
       patch :update, params: { game_id: game.id, id: piece.id, piece: { x: req_x, y: req_y } }
       game.reload
       expect(piece.x).to eq(req_x)
       expect(piece.y).to eq(req_y)
+      expect(response).to redirect_to game_path(game.id)
     end
   end
 end

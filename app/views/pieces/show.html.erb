@@ -10,43 +10,36 @@
       <% if y % 2 == 1 %>
         <% if x % 2 == 0 %>
           <% cell_color = "white" %>
-          <% req_x = x %>
-          <% req_y = y %>
         <% else %>
           <% cell_color = "grey" %>
-          <% req_x = x %>
-          <% req_y = y %>
         <% end %>
       <% else %>
         <%# on even numbered rows, alternate between white and black, starting with black %>
         <% if x % 2 == 0 %>
           <% cell_color = "grey" %>
-          <% req_x = x %>
-          <% req_y = y %>
         <% else %>
           <% cell_color = "white" %>
-          <% req_x = x %>
-          <% req_y = y %>
         <% end %>
       <% end %>
 
-      <% piece = @game.pieces.find_by(x: req_x, y: req_y) %>
-        <% if piece.present? %>
-          <%= link_to game_piece_path( x: x, y: y ), :method => :patch do %>
-            <div class=<%= cell_color %> id=<%= "#{x}-#{y}" %>>
+      <% piece = @game.pieces.find_by(x: x, y: y) %>
+      <% if piece.present? %>
+        <%# if piece present at x-y, create: cell color/id div, div link and piece image %>
+        <%= link_to game_piece_path(@piece, piece: { x: x, y: y }), method: "patch" do %>
+          <div class=<%= cell_color %> id=<%= "#{x}-#{y}" %>>
+            <div class="pieces">
               <% piece_color = piece.color.downcase %>
               <% piece_type = piece.type.downcase %>
-
-              <div class="pieces">
-                <%= image_tag("#{piece_color}_#{piece_type}", height: '90', width: '90') %>
-              </div>
+              <%= image_tag("#{piece_color}_#{piece_type}", height: '90', width: '90') %>
             </div>
-          <% end %>
-        <% else %>
-          <%= link_to game_piece_path( x: x, y: y ), :method => :patch do %>
-            <div class=<%= cell_color %> id=<%= "#{x}-#{y}" %>></div>
-          <% end %>
+          </div>
         <% end %>
+      <% else %>
+        <%# if piece not present at x-y, create: cell color/id div and div link %>
+        <%= link_to game_piece_path(@piece, piece: { x: x, y: y }), method: "patch" do %>
+          <div class=<%= cell_color %> id=<%= "#{x}-#{y}" %>></div>
+        <% end %>
+      <% end %>
 
     <% end %>
     </div>
