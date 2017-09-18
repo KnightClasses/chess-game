@@ -18,20 +18,26 @@
         <% if x % 2 == 0 %>
           <% cell_color = "grey" %>
         <% else %>
-      <% cell_color = "white" %>
+          <% cell_color = "white" %>
         <% end %>
       <% end %>
 
-      <div class=<%= cell_color %> id=<%= "#{x}-#{y}" %>>
-        <% piece = Piece.find_by("x = ? AND y = ? AND game_id = ?", x, y, @game.id) %>
-        <% if piece %>
-          <% piece_color = piece.color.downcase %>
-          <% piece_type = piece.type.downcase %>
-          <div class="pieces">
-            <%= image_tag("#{piece_color}_#{piece_type}", height: '90', width: '90') %>
-          </div>
+      <% piece = @game.pieces.find_by(x: x, y: y) %>
+        <% if piece.present? %>
+        <%# if piece present at x-y, create: cell color/id div, div link and piece image %>
+          <%= link_to game_piece_path(@game, piece) do %>
+            <div class=<%= cell_color %> id=<%= "#{x}-#{y}" %>>
+              <div class="pieces">
+                <% piece_color = piece.color.downcase %>
+                <% piece_type = piece.type.downcase %>
+                <%= image_tag("#{piece_color}_#{piece_type}", height: '90', width: '90') %>
+              </div>
+            </div>
+          <% end %>
+        <% else %>
+        <%# if piece not present at x-y, create: cell color/id div and div link %>
+          <div class=<%= cell_color %> id=<%= "#{x}-#{y}" %>></div>
         <% end %>
-      </div>
 
     <% end %>
     </div>
