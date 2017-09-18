@@ -10,27 +10,19 @@
       <% if y % 2 == 1 %>
         <% if x % 2 == 0 %>
           <% cell_color = "white" %>
-          <% req_x = x %>
-          <% req_y = y %>
         <% else %>
           <% cell_color = "grey" %>
-          <% req_x = x %>
-          <% req_y = y %>
         <% end %>
       <% else %>
         <%# on even numbered rows, alternate between white and black, starting with black %>
         <% if x % 2 == 0 %>
           <% cell_color = "grey" %>
-          <% req_x = x %>
-          <% req_y = y %>
         <% else %>
           <% cell_color = "white" %>
-          <% req_x = x %>
-          <% req_y = y %>
         <% end %>
       <% end %>
 
-      <% piece = @game.pieces.find_by(x: req_x, y: req_y) %>
+      <% piece = @game.pieces.find_by(x: x, y: y) %>
         <% if piece.present? %>
         <%# if piece present at x-y, create: cell color/id div, div link and piece image %>
           <%= link_to game_piece_path(@game, piece) do %>
