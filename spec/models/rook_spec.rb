@@ -16,8 +16,8 @@ RSpec.describe Rook, type: :model do
       FactoryGirl.create(:piece, type: Rook)
       rook1 = Rook.last
 
-      expect(rook1.is_valid?(6,3)).to eq(true)
-      expect(rook1.is_valid?(3,6)).to eq(true)
+      expect(rook1.is_valid?(6, 3)).to eq(true)
+      expect(rook1.is_valid?(3, 6)).to eq(true)
     end
 
     it "should successfully detect if a move is not valid" do 
