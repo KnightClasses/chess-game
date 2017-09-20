@@ -24,8 +24,6 @@ RSpec.describe Bishop, type: :model do
     it "should tell us that the move is invalid" do
       FactoryGirl.create(:piece, type: Bishop, x:1, y:1)
       piece = Piece.last
-      
-      
       expect(piece.is_valid(7,8)).to eq(false)
       expect(piece.is_valid(6,4)).to eq(false)
     end
