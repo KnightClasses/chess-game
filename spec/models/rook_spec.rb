@@ -4,7 +4,7 @@ RSpec.describe Rook, type: :model do
   describe "check method on rook should return" do
     it "should tell us 'this is the rook'" do
       FactoryGirl.create(:piece,type: Rook)
-      piece = Piece.last
+      rook1 = Rook.last
       expected = "This is the rook"
 
       expect(piece.check).to eq(expected)
