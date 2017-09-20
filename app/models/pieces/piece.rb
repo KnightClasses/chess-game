@@ -84,12 +84,14 @@ class Piece < ApplicationRecord
       if blocking_piece.color != self.color
         # take it off the board and change its status to inactive
         blocking_piece.update(x: 0, y: 0, active: false)
+        self.update(x: req_x, y: req_y)
       else
-        # self.flash_alert = "You can not capture your own piece. Please try again."
-        redirect_to game_path(@game)
+        # need some sort of alert saying "You can not capture your own piece. Please try again."
       end
+    else
+      # if the clicked cell is empty then move the piece there
+      self.update(x: req_x, y: req_y)
     end
-    self.update(x: req_x, y: req_y)
 
 
   end

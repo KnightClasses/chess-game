@@ -1,47 +1,70 @@
 <h1 class="game-name"><%= @game.name %></h1>
 
-<div class='board'>
-  <%# establishes the vertical dimension of the board %>
-  <% 8.downto(1) do |y| %>
-    <div class='row'>
-    <%# establishes the horizontal dimension of the board %>
-    <% 1.upto(8) do |x| %>
-      <%# on odd numbered rows, alternate between white and black, starting with white %>
-      <% if y % 2 == 1 %>
-        <% if x % 2 == 0 %>
-          <% cell_color = "white" %>
-        <% else %>
-          <% cell_color = "grey" %>
-        <% end %>
-      <% else %>
-        <%# on even numbered rows, alternate between white and black, starting with black %>
-        <% if x % 2 == 0 %>
-          <% cell_color = "grey" %>
-        <% else %>
-          <% cell_color = "white" %>
-        <% end %>
-      <% end %>
-
-      <% piece = @game.pieces.find_by(x: x, y: y) %>
-        <% if piece.present? %>
-        <%# if piece present at x-y, create: cell color/id div, div link and piece image %>
-          <%= link_to game_piece_path(@game, piece) do %>
-            <div class=<%= cell_color %> id=<%= "#{x}-#{y}" %>>
-              <div class="pieces">
-                <% piece_color = piece.color.downcase %>
-                <% piece_type = piece.type.downcase %>
-                <%= image_tag("#{piece_color}_#{piece_type}", height: '90', width: '90') %>
-              </div>
-            </div>
+<div class="row">
+  <div class="board-container col-9">
+    <div class='board'>
+      <%# establishes the vertical dimension of the board %>
+      <% 8.downto(1) do |y| %>
+        <div class='row'>
+        <%# establishes the horizontal dimension of the board %>
+        <% 1.upto(8) do |x| %>
+          <%# on odd numbered rows, alternate between white and black, starting with white %>
+          <% if y % 2 == 1 %>
+            <% if x % 2 == 0 %>
+              <% cell_color = "white" %>
+            <% else %>
+              <% cell_color = "grey" %>
+            <% end %>
+          <% else %>
+            <%# on even numbered rows, alternate between white and black, starting with black %>
+            <% if x % 2 == 0 %>
+              <% cell_color = "grey" %>
+            <% else %>
+              <% cell_color = "white" %>
+            <% end %>
           <% end %>
-        <% else %>
-        <%# if piece not present at x-y, create: cell color/id div and div link %>
-          <div class=<%= cell_color %> id=<%= "#{x}-#{y}" %>></div>
-        <% end %>
 
-    <% end %>
+          <% piece = @game.pieces.find_by(x: x, y: y) %>
+            <% if piece.present? %>
+            <%# if piece present at x-y, create: cell color/id div, div link and piece image %>
+              <%= link_to game_piece_path(@game, piece) do %>
+                <div class=<%= cell_color %> id=<%= "#{x}-#{y}" %>>
+                  <div class="pieces">
+                    <% piece_color = piece.color.downcase %>
+                    <% piece_type = piece.type.downcase %>
+                    <%= image_tag("#{piece_color}_#{piece_type}", height: '90', width: '90') %>
+                  </div>
+                </div>
+              <% end %>
+            <% else %>
+            <%# if piece not present at x-y, create: cell color/id div and div link %>
+              <div class=<%= cell_color %> id=<%= "#{x}-#{y}" %>></div>
+            <% end %>
+
+        <% end %>
+        </div>
+      <% end %>
     </div>
-  <% end %>
+  </div>
+
+  <div class="player-console col-3">
+    <div class="captured-pieces">
+      <h5>White Player's Captures</h5><br />
+      <% captured_pieces = @game.pieces.where(color: "black", active: false) %>
+      <% captured_pieces.each do |captured_piece| %>
+        <%= image_tag("#{captured_piece.color.downcase}_#{captured_piece.type.downcase}", height: '45', width: '45') %>
+      <% end %>
+    </div>
+    <br />
+    <div class="captured-pieces">
+      <h5>Black Player's Captures</h5><br />
+      <% captured_pieces = @game.pieces.where(color: "white", active: false) %>
+      <% captured_pieces.each do |captured_piece| %>
+        <%= image_tag("#{captured_piece.color.downcase}_#{captured_piece.type.downcase}", height: '45', width: '45') %>
+      <% end %>
+    </div>
+  </div>
+
 </div>
 
 <% if notice.present? %>
