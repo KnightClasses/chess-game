@@ -7,7 +7,7 @@ RSpec.describe Rook, type: :model do
       rook1 = Rook.last
       expected = "This is the rook"
 
-      expect(piece.check).to eq(expected)
+      expect(rook1.check).to eq(expected)
     end
   end
 
