@@ -72,4 +72,25 @@ class Piece < ApplicationRecord
 
     return false
   end
+
+  def move_to!(req_x, req_y, current_game_id)
+
+    # return the piece if it exists in the clicked cell
+    blocking_piece = Piece.find_by("x = ? AND y = ? AND game_id = ?", req_x, req_y, current_game_id)
+
+    # if there is a piece,
+    if blocking_piece
+      # that is not the same color,
+      if blocking_piece.color != self.color
+        # take it off the board and change its status to inactive
+        blocking_piece.update(x: 0, y: 0, active: false)
+      else
+        # self.flash_alert = "You can not capture your own piece. Please try again."
+        redirect_to game_path(@game)
+      end
+    end
+    self.update(x: req_x, y: req_y)
+
+
+  end
 end
