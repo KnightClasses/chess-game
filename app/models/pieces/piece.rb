@@ -74,8 +74,8 @@ class Piece < ApplicationRecord
   end
 
   def move_to!(req_x, req_y, current_game_id)
-
-    # return the piece if it exists in the clicked cell
+    @alert_message = ""
+    # return the piece (if it exists in the clicked cell)
     blocking_piece = Piece.find_by("x = ? AND y = ? AND game_id = ?", req_x, req_y, current_game_id)
 
     # if there is a piece,
@@ -92,7 +92,10 @@ class Piece < ApplicationRecord
       # if the clicked cell is empty then move the piece there
       self.update(x: req_x, y: req_y)
     end
+  end
 
 
+  def same_team?(req_x, req_y, req_color)
+    return self.color == req_color
   end
 end
