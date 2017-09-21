@@ -27,4 +27,21 @@ RSpec.describe Queen, type: :model do
       expect(queen1.is_valid?(8,1)).to eq(false)
     end
   end
+
+
+  describe "Queen#is_valid" do
+    it "should tell if the queens move is valid" do
+      FactoryGirl.create(:piece, type: Queen)
+      piece = Piece.last
+      expect(piece.is_valid(3,4)).to eq(true)
+      expect(piece.is_valid(8,3)).to eq(true)
+    end
+
+    it "should tell us the queen's move is invalid" do
+      FactoryGirl.create(:piece, type: Queen)
+      piece = Piece.last
+      expect(piece.is_valid(5,2)).to eq(false)
+      expect(piece.is_valid(8,1)).to eq(false)
+    end
+  end
 end
