@@ -29,7 +29,6 @@ RSpec.describe Bishop, type: :model do
       expect(bishop1.is_valid?(3,5)).to eq(false)
       expect(bishop1.is_valid?(5,3)).to eq(false)
     end
-end
-
+  end
 end
 
