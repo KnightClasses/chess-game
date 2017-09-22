@@ -1,7 +1,5 @@
 class PiecesController < ApplicationController
-  before_action only: [:update] do
-    validate_move
-  end
+  before_action :validate_move, only: [:update]
 
   def show
     @piece = Piece.find(params[:id])
