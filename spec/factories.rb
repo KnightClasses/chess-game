@@ -21,4 +21,18 @@ FactoryGirl.define do
     y 3
     association :game
   end
+
+  factory :game_no_callback do
+    name "no piece!"
+    white_player_id 1
+    association :user
+  end
+
+  factory :piece_no_callback do
+    color 0 
+    type King
+    x 3 
+    y 3
+    association :game_no_callback
+  end
 end
