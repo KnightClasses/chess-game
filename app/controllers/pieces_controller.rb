@@ -24,8 +24,8 @@ class PiecesController < ApplicationController
     req_y = piece_params[:y]
 
     if @piece.same_team?(req_x, req_y, @game.id)
-      flash[:notice] = "You can not capture your own piece. Please try again."
-      redirect_to game_path(@game)
+      flash[:notice] = "You cannot capture your own piece. Please try again."
+      redirect_to game_piece_path(@game)
     end
   end
 
