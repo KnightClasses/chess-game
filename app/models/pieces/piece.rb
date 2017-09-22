@@ -74,7 +74,7 @@ class Piece < ApplicationRecord
   end
 
   def move_to!(req_x, req_y, current_game_id)
-    # return the piece (if it exists in the clicked cell)
+    # return the 2nd piece (if it exists in the clicked cell)
     blocking_piece = Piece.find_by("x = ? AND y = ? AND game_id = ?", req_x, req_y, current_game_id)
 
     # if there is a 2nd piece,
@@ -83,9 +83,8 @@ class Piece < ApplicationRecord
       if blocking_piece.color != self.color
         # take the 2nd piece off the board and change its status to inactive
         blocking_piece.update(x: 0, y: 0, active: false)
+        # move the 1st piece to the new spot
         self.update(x: req_x, y: req_y)
-      else
-        # need some sort of alert saying "You can not capture your own piece. Please try again."
       end
     else
       # if the clicked cell is empty then move the 1st piece there
@@ -93,7 +92,8 @@ class Piece < ApplicationRecord
     end
   end
 
-  def same_team?(req_x, req_y, req_color)
-    return self.color == req_color
+  def same_team?(req_x, req_y, current_game_id)
+    blocking_piece = Piece.find_by("x = ? AND y = ? AND game_id = ?", req_x, req_y, current_game_id)
+    return self.color == blocking_piece.color if blocking_piece
   end
 end

@@ -1,6 +1,6 @@
 class PiecesController < ApplicationController
-  before_action :only => :update do
-    validate_move(piece_params)
+  before_action only: [:update] do
+    validate_move
   end
 
   def show
@@ -17,20 +17,21 @@ class PiecesController < ApplicationController
     redirect_to game_path(@game)
   end
 
-
   private
-
-  def validate_move(piece_params)
+  
+  def validate_move
     @piece = Piece.find(params[:id])
-    req_color = piece_params[:color]
+    @game = @piece.game
+    req_x = piece_params[:x]
+    req_y = piece_params[:y]
 
-    # if @piece.color == req_color
-      # flash[:notice] = "You can not capture your own piece. Please try again."
-    # end
-
+    if @piece.same_team?(req_x, req_y, @game.id)
+      flash[:notice] = "You can not capture your own piece. Please try again."
+      redirect_to game_path(@game)
+    end
   end
 
   def piece_params
-    params.require(:piece).permit(:x, :y, :color)
+    params.require(:piece).permit(:x, :y)
   end
 end
