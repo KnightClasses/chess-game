@@ -32,7 +32,7 @@
                   <div class="pieces">
                     <% piece_color = piece.color.downcase %>
                     <% piece_type = piece.type.downcase %>
-                    <%= image_tag("#{piece_color}_#{piece_type}", height: '90', width: '90') %>
+                    <%= image_tag("#{piece_color}_#{piece_type}.png", height: '90', width: '90') %>
                   </div>
                 </div>
               <% end %>
@@ -52,7 +52,7 @@
       <h5>White Player's Captures</h5><br />
       <% captured_pieces = @game.pieces.where(color: "black", active: false) %>
       <% captured_pieces.each do |captured_piece| %>
-        <%= image_tag("#{captured_piece.color.downcase}_#{captured_piece.type.downcase}", height: '45', width: '45') %>
+        <%= image_tag("#{captured_piece.color.downcase}_#{captured_piece.type.downcase}.png", height: '45', width: '45') %>
       <% end %>
     </div>
     <br />
@@ -60,7 +60,7 @@
       <h5>Black Player's Captures</h5><br />
       <% captured_pieces = @game.pieces.where(color: "white", active: false) %>
       <% captured_pieces.each do |captured_piece| %>
-        <%= image_tag("#{captured_piece.color.downcase}_#{captured_piece.type.downcase}", height: '45', width: '45') %>
+        <%= image_tag("#{captured_piece.color.downcase}_#{captured_piece.type.downcase}.png", height: '45', width: '45') %>
       <% end %>
     </div>
   </div>
