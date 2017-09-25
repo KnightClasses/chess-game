@@ -28,17 +28,19 @@
             <% if piece.present? %>
             <%# if piece present at x-y, create: cell color/id div, div link and piece image %>
               <%= link_to game_piece_path(@game, piece) do %>
-                <div class=<%= cell_color %> id=<%= "#{x}-#{y}" %>>
+                <div class=<%= "#{cell_color}" %> id=<%= "#{x}-#{y}" %> data-x=<%= "#{x}" %> data-y=<%= "#{y}" %> data-update-url=<%= "#{game_piece_path(@game, piece)}" %> >
                   <div class="pieces">
                     <% piece_color = piece.color.downcase %>
                     <% piece_type = piece.type.downcase %>
+                    <% pieceX = piece.x %>
+                    <% pieceY = piece.y %>
                     <%= image_tag("#{piece_color}_#{piece_type}.png", height: '90', width: '90') %>
                   </div>
                 </div>
               <% end %>
             <% else %>
             <%# if piece not present at x-y, create: cell color/id div and div link %>
-              <div class=<%= cell_color %> id=<%= "#{x}-#{y}" %>></div>
+              <div class=<%= "#{cell_color}" %> id=<%= "#{x}-#{y}" %> data-x=<%= "#{x}" %> data-y=<%= "#{y}" %> ></div>
             <% end %>
 
         <% end %>
@@ -66,3 +68,22 @@
   </div>
 
 </div>
+
+<script>
+  $( ".white" ).addClass( "droppable" );
+  $( ".grey" ).addClass( "droppable" );
+  $(function() {
+    $('.pieces').draggable();
+    $( ".droppable" ).droppable({
+      drop: function( event, ui ) { 
+        var x = $(event.target).data("x");
+        var y = $(event.target).data("y");
+        $.ajax({
+          type: 'PATCH',
+          url: ui.draggable.parent().data('update-url'),
+          data: { piece: { x: x, y: y } }
+        });
+      }
+    });
+  });
+</script>
