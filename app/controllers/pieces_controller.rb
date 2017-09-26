@@ -12,7 +12,7 @@ class PiecesController < ApplicationController
     req_x = piece_params[:x]
     req_y = piece_params[:y]
     @piece.move_to!(req_x, req_y, @game.id)
-    redirect_to game_path(@game)
+    render json: @piece
   end
 
   private
@@ -24,8 +24,9 @@ class PiecesController < ApplicationController
     req_y = piece_params[:y]
 
     if @piece.same_team?(req_x, req_y, @game.id)
-      flash[:notice] = "You cannot capture your own piece. Please try again."
-      redirect_to game_piece_path(@game)
+      respond_to do |format|
+        format.js { flash[:notice] = "You cannot capture your own piece. Please try again." }
+      end
     end
   end
 
