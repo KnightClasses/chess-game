@@ -25,7 +25,6 @@ RSpec.describe PiecesController, type: :controller do
       piece.reload
       expect(piece.x).to eq(req_x)
       expect(piece.y).to eq(req_y)
-      expect(response).to redirect_to game_path(game.id)
     end
   end
 end
