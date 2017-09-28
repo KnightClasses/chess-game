@@ -11,7 +11,7 @@ class PiecesController < ApplicationController
     @game = @piece.game
     req_x = piece_params[:x].to_i
     req_y = piece_params[:y].to_i
-    @piece.move_to!(req_x, req_y, @game.id) if class_eval(@piece.type).find_by_game_id(@game.id).is_valid?(req_x,req_y)
+    @piece.move_to!(req_x, req_y, @game.id) if @piece.is_valid?(req_x,req_y)
     render json: @piece
   end
 
