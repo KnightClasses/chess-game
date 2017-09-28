@@ -34,12 +34,11 @@ $(document).ready(function () {
             piece: piece
           },
           success: function(){
-            location.reload();
+            location.reload(true);
             $(".alert alert-info").html("<%= flash[:notice] %>");
           },
         });
       }
     });
   });
-
 });
