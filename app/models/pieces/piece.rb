@@ -4,23 +4,25 @@ class Piece < ApplicationRecord
   enum color: {white: 0, black: 1}
 
   # req_x and req_y are coordinates/integers
-  def is_obstructed?(req_x, req_y)
+  def is_obstructed?(req_x, req_y, current_game_id)
     if self.x == req_x # vertical
+      h = self.x
       j = self.y
       k = req_y
       if self.y < req_y # up
-        return true if Piece.where("y > ? AND y < ?", j, k).present?
+        return true if Piece.where("x = ? AND y > ? AND y < ? AND game_id = ?", h, j, k, game_id).present?
       else # down
-        return true if Piece.where("y < ? AND y > ?", j, k).present?
+        return true if Piece.where("x = ? AND y < ? AND y > ? AND game_id = ?", h, j, k, game_id).present?
       end
 
     elsif self.y == req_y # horizontal
+      h = self.y
       j = self.x
       k = req_x
       if self.x < req_x # to right
-        return true if Piece.where("x > ? AND x < ?", j, k).present?
+        return true if Piece.where("y = ? AND x > ? AND x < ? AND game_id = ?", h, j, k, game_id).present?
       else # to left
-        return true if Piece.where("x < ? AND x > ?", j, k).present?
+        return true if Piece.where("y = ? AND x < ? AND x > ? AND game_id = ?", h, j, k, game_id).present?
       end
 
     elsif (self.x - req_x).abs == (self.y - req_y).abs # diagonal
@@ -31,7 +33,7 @@ class Piece < ApplicationRecord
         while i < (self.x - req_x).abs
           j += 1
           k += 1
-          return true if Piece.where("x = ? AND y = ?", j, k).present?
+          return true if Piece.where("x = ? AND y = ? AND game_id = ?", j, k, game_id).present?
           i += 1
         end
       elsif self.x > req_x && self.y < req_y # x decreasing, y increasing
@@ -41,7 +43,7 @@ class Piece < ApplicationRecord
         while i < (self.x - req_x).abs
           j -= 1
           k += 1
-          return true if Piece.where("x = ? AND y = ?", j, k).present?
+          return true if Piece.where("x = ? AND y = ? AND game_id = ?", j, k, game_id).present?
           i += 1
         end
       elsif self.x > req_x && self.y > req_y # x decreasing, y decreasing
@@ -51,7 +53,7 @@ class Piece < ApplicationRecord
         while i < (self.x - req_x).abs
           j -= 1
           k -= 1
-          return true if Piece.where("x = ? AND y = ?", j, k).present?
+          return true if Piece.where("x = ? AND y = ? AND game_id = ?", j, k, game_id).present?
           i += 1
         end
       else # x increasing, y decreasing
@@ -61,12 +63,15 @@ class Piece < ApplicationRecord
         while i < (self.x - req_x).abs
           j += 1
           k -= 1
-          return true if Piece.where("x = ? AND y = ?", j, k).present?
+          return true if Piece.where("x = ? AND y = ? AND game_id = ?", j, k, game_id).present?
           i += 1
         end
       end
 
-    else # invalid move (temporarily disregarding knight)
+    elsif self.type == "Knight"
+      return false
+
+    else # invalid move
       return "invalid move"
     end
 
