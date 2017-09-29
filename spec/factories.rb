@@ -19,6 +19,6 @@ FactoryGirl.define do
     type King
     x 3
     y 3
-    association :game
+    game
   end
 end
