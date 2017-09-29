@@ -5,7 +5,7 @@ class Queen < Piece
   end
 
   def is_valid?(req_x, req_y)
-    if (req_x == self.x || req_y == self.y) || ((req_x - self.x).abs == (req_y - self.y).abs)
+    if  ((req_x - self.x).abs == (req_y - self.y).abs) || (req_x == self.x || req_y == self.y)
         return true
     else
         return false
