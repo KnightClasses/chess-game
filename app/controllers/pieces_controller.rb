@@ -11,7 +11,7 @@ class PiecesController < ApplicationController
     @game = @piece.game
     req_x = piece_params[:x].to_i
     req_y = piece_params[:y].to_i
-    @piece.move_to!(req_x, req_y, @game.id) if @piece.is_valid?(req_x,req_y)
+    @piece.move_to!(req_x, req_y, @game.id) if @piece.is_valid?(req_x,req_y) && !@piece.is_obstructed?(req_x,req_y, @game.id)
     render json: @piece
   end
 
@@ -20,8 +20,8 @@ class PiecesController < ApplicationController
   def validate_move
     @piece = Piece.find(params[:id])
     @game = @piece.game
-    req_x = piece_params[:x]
-    req_y = piece_params[:y]
+    req_x = piece_params[:x].to_i
+    req_y = piece_params[:y].to_i
 
     if @piece.same_team?(req_x, req_y, @game.id)
       respond_to do |format|
