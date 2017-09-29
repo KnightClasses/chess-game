@@ -26,6 +26,13 @@ class GamesController < ApplicationController
     redirect_to game_path(@game)
   end
 
+  def active
+    @game = Game.find(params[:id])
+    @game.update_attribute(:active, false)
+    redirect_to root_path
+  end
+
+
   private
 
   def game_params

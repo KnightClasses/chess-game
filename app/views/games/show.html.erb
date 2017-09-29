@@ -1,5 +1,9 @@
 <h1 class="game-name"><%= @game.name %></h1>
 
+<div class="btn btn-primary">
+  <%= link_to "Forfeit Game", active_game_path(@game, user_id: current_user.id), method: :patch %>
+</div>
+
 <div class="row">
   <div class="board-container col-9">
     <div class='board'>
