@@ -27,7 +27,7 @@ class Piece < ApplicationRecord
 
     elsif (self.x - req_x).abs == (self.y - req_y).abs # diagonal
       if self.x < req_x && self.y < req_y # x increasing, y increasing
-        i = 0
+        i = 1
         j = self.x
         k = self.y
         while i < (self.x - req_x).abs
@@ -37,7 +37,7 @@ class Piece < ApplicationRecord
           i += 1
         end
       elsif self.x > req_x && self.y < req_y # x decreasing, y increasing
-        i = 0
+        i = 1
         j = self.x
         k = self.y
         while i < (self.x - req_x).abs
@@ -47,7 +47,7 @@ class Piece < ApplicationRecord
           i += 1
         end
       elsif self.x > req_x && self.y > req_y # x decreasing, y decreasing
-        i = 0
+        i = 1
         j = self.x
         k = self.y
         while i < (self.x - req_x).abs
@@ -57,7 +57,7 @@ class Piece < ApplicationRecord
           i += 1
         end
       else # x increasing, y decreasing
-        i = 0
+        i = 1
         j = self.x
         k = self.y
         while i < (self.x - req_x).abs
