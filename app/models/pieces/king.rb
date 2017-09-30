@@ -6,6 +6,7 @@ class King < Piece
 
 
   def is_valid?(req_x, req_y)
+    return true if (req_x - self.x).abs == 2 && self.can_castle?(req_x)
     return true if (req_x - self.x).abs <= 1 && (req_y - self.y).abs <= 1
 
     return false
@@ -32,6 +33,10 @@ class King < Piece
       self.update_attributes(x:self.x,y:self.y) 
       return
     end
+    castle_rook_x = req_x == 7 ? 8 : 1
+    castle_rook_to_move = req_x == 7 ? 6 : 4
     self.update_attributes(x:req_x)
+    Piece.where("game_id = ? AND x = ? AND y = ? and type = 'Rook'",self.game_id,castle_rook_x,self.y).take.update_attributes(x:castle_rook_to_move)
+
   end
 end
