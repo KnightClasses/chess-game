@@ -13,5 +13,6 @@ class Rook < Piece
   def can_castle?
     #returns true if unmoved
     return true if self.updated_at == self.created_at 
+    return false
   end
 end

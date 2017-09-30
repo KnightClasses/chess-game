@@ -28,4 +28,21 @@ RSpec.describe Rook, type: :model do
       expect(rook1.is_valid?(2, 2)).to eq(false)
     end
   end
+
+  describe "Rook#can_castle?" do
+    it "should let me castle if I haven't moved" do
+      FactoryGirl.create(:piece, type:Rook)
+      rook = Piece.last
+      
+      expect(rook.can_castle?).to eq(true)
+    end
+
+    it "should not let me castle if I have moved" do
+      FactoryGirl.create(:piece, type:Rook)
+      rook = Piece.last
+      rook.update_attributes(x:8)
+
+      expect(rook.can_castle?).to eq(false)
+    end
+  end
 end
