@@ -16,7 +16,7 @@ class PiecesController < ApplicationController
   end
 
   private
-  
+
   def validate_move
     @piece = Piece.find(params[:id])
     @game = @piece.game
