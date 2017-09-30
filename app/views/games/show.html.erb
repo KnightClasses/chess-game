@@ -49,25 +49,6 @@
 
   <div class="player-console col-3">
     <div class="captured-pieces">
-      <h5>White Player's Captures</h5><br />
-      <% captured_pieces = @game.pieces.where(color: "black", active: false) %>
-      <% captured_pieces.each do |captured_piece| %>
-        <%= image_tag("#{captured_piece.color.downcase}_#{captured_piece.type.downcase}.png", height: '45', width: '45') %>
-      <% end %>
-    </div>
-    <div>
-      <% if @game.pieces.where("type = 'King' AND color = 0").take.can_castle?(7) || @game.pieces.where("type = 'King' AND color = 0").take.can_castle?(3)%>
-        <h3>White can castle</h3>
-      <% end %>
-    </div>
-    <div class="btn btn-primary">
-      <%= link_to "White: Forfeit Game", active_game_path(@game, user_id: @game.white_player_id), method: :patch %>
-    </div>
-
-    <br />
-    <br />
-
-    <div class="captured-pieces">
       <h5>Black Player's Captures</h5><br />
       <% captured_pieces = @game.pieces.where(color: "white", active: false) %>
       <% captured_pieces.each do |captured_piece| %>
@@ -81,6 +62,25 @@
     </div>
     <div class="btn btn-primary">
       <%= link_to "Black: Forfeit Game", active_game_path(@game, user_id: @game.black_player_id), method: :patch %>
+    </div>
+
+    <br />
+    <br />
+    
+    <div class="captured-pieces">
+      <h5>White Player's Captures</h5><br />
+      <% captured_pieces = @game.pieces.where(color: "black", active: false) %>
+      <% captured_pieces.each do |captured_piece| %>
+        <%= image_tag("#{captured_piece.color.downcase}_#{captured_piece.type.downcase}.png", height: '45', width: '45') %>
+      <% end %>
+    </div>
+    <div>
+      <% if @game.pieces.where("type = 'King' AND color = 0").take.can_castle?(7) || @game.pieces.where("type = 'King' AND color = 0").take.can_castle?(3)%>
+        <h3>White can castle</h3>
+      <% end %>
+    </div>
+    <div class="btn btn-primary">
+      <%= link_to "White: Forfeit Game", active_game_path(@game, user_id: @game.white_player_id), method: :patch %>
     </div>
   </div>
 
