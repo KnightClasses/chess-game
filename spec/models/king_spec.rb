@@ -32,18 +32,22 @@ RSpec.describe King, type: :model do
 
   describe "King#can_castle?" do
     it "should let me castle if I haven't moved" do
-      FactoryGirl.create(:piece)
-      king = Piece.last
+      game = FactoryGirl.create(:game)
+      FactoryGirl.create(:piece, type: Rook, x: 8, y:4, game_id: game.id)
+      FactoryGirl.create(:piece, x:5 ,y:4, game_id: game.id)
+      king = Piece.where("x = 5 AND y = 4 AND game_id = ?", game.id).take
       
-      expect(king.can_castle?).to eq(true)
+      puts Piece.where("type = 'Rook' AND x = 8 AND game_id = ? AND y = ?",king.game_id,king.y)
+      expect(king.can_castle?(7)).to eq(true)
     end
 
     it "should not let me castle if I have moved" do
-      FactoryGirl.create(:piece)
-      king = Piece.last
-      king.update_attributes(x:8)
-
-      expect(king.can_castle?).to eq(false)
+      game = FactoryGirl.create(:game)
+      FactoryGirl.create(:piece, type: Rook, x: 8, y:4, game_id: game.id)
+      FactoryGirl.create(:piece, x:5 ,y:4, game_id: game.id)
+      king = Piece.where("x = 5 AND y = 4 AND game_id = ?", game.id).take
+      
+      expect(king.can_castle?(1)).to eq(false)
     end
   end
 
@@ -72,7 +76,6 @@ RSpec.describe King, type: :model do
     end
 
     it "should NOT let me castlie if rook is moved" do
-      "******"
       FactoryGirl.create(:piece, type: Rook, x: 8, y:8)
       FactoryGirl.create(:piece, x:5 ,y:8)
       rook = Piece.where("type = 'Rook'").take

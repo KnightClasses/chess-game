@@ -11,21 +11,24 @@ class King < Piece
     return false
   end
 
-  def can_castle?
+  def unmoved(piece)
+    return false if piece == nil
+    return true if piece.updated_at == piece.created_at
+    return false
+  end
+
+  def can_castle?(req_x)
     #returns true if unmoved
-    return true if self.updated_at == self.created_at 
+    return false if req_x != 7 && req_x != 3
+    castle_rook_x = req_x == 7 ? 8 : 1
+    return true if unmoved(self) && unmoved(Piece.where("game_id = ? AND x = ? AND y = ? and type = 'Rook'",self.game_id,castle_rook_x,self.y).take)
     return false
   end
 
   def castle!(req_x)
     #alter this section when in_check is complete
     in_check = false
-    self.update_attributes(x:self.x,y:self.y);return unless self.can_castle? || in_check || (req_x != 7 || 3)
-    search_params = "x = #{req_x == 7 ? 8 : 1} AND y = #{self.y} AND game_id = #{self.game_id} AND type = 'Rook'"
-    castle_rook = Piece.where(search_params).take
-    if castle_rook != nil && castle_rook.can_castle?
-      castle_rook.update_attributes(y:req_x == 7 ? 6 : 4)
-      self.update_attributes(y:req_x)
-    end
+    self.update_attributes(x:self.x,y:self.y);return unless self.can_castle?(req_x) || in_check || (req_x != 7 || 3)
+    self.update_attributes(y:req_x)
   end
 end
