@@ -28,7 +28,13 @@ class King < Piece
   def castle!(req_x)
     #alter this section when in_check is complete
     in_check = false
-    self.update_attributes(x:self.x,y:self.y);return unless self.can_castle?(req_x) || in_check || (req_x != 7 || 3)
-    self.update_attributes(y:req_x)
+    puts "before"
+    unless self.can_castle?(req_x) || in_check
+      self.update_attributes(x:self.x,y:self.y) 
+      puts "during"
+      return
+    end
+    puts "after"
+    self.update_attributes(x:req_x)
   end
 end
