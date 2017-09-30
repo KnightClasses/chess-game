@@ -63,6 +63,15 @@
         <%= image_tag("#{captured_piece.color.downcase}_#{captured_piece.type.downcase}.png", height: '45', width: '45') %>
       <% end %>
     </div>
+
+    <div>
+      <% if @game.pieces.where("type = 'King' AND color = 1").take.can_castle?(7) || @game.pieces.where("type = 'King' AND color = 1").take.can_castle?(3)%>
+        <h3>Black can Castle</h3>
+      <% end %>
+      <% if @game.pieces.where("type = 'King' AND color = 0").take.can_castle?(7) || @game.pieces.where("type = 'King' AND color = 0").take.can_castle?(3)%>
+        <h3>White can Castle!
+      <% end %>
+    </div>
   </div>
 
 </div>
