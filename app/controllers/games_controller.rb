@@ -1,4 +1,6 @@
 class GamesController < ApplicationController
+  before_action :active_game?, only: [:show, :update]
+
   def index
   end
 
@@ -26,7 +28,22 @@ class GamesController < ApplicationController
     redirect_to game_path(@game)
   end
 
+  def active
+    @game = Game.find(params[:id])
+    @game.update_attribute(:active, false)
+    redirect_to root_path
+  end
+
+
   private
+
+  def active_game?
+    @game = Game.find(params[:id])
+    @active_state = @game.active
+    if @active_state == false
+      redirect_to root_path
+    end
+  end
 
   def game_params
     params.require(:game).permit(:name,:white_player_id, :black_player_id)
