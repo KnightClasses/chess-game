@@ -21,4 +21,5 @@ FactoryGirl.define do
     y 3
     game
   end
+  
 end

@@ -28,4 +28,31 @@ RSpec.describe Game, type: :model do
       expect((Piece.group(:color).count)["black"]).to eq(16)
     end
   end
+
+  describe "game#clear_current_board" do
+    it "should remove all pieces from the current game" do
+      game = FactoryGirl.create(:game)
+      game.clear_current_board
+
+      expect(Piece.where("game_id = ?",game.id).count).to eq(0)
+    end
+  end
+
+  describe "game#all_from_current_game" do
+    it "should return an array of all pieces in the game that match the inputs" do
+      game = FactoryGirl.create(:game)
+      pawns = game.all_from_current_game(type:"Pawn")
+
+      expect(pawns.length).to eq(16)
+    end
+  end
+
+  describe "game#one_from_current_game" do
+    it "should return a single piece from the current game that matches the inputs" do
+      game = FactoryGirl.create(:game)
+      white_king = game.one_from_current_game(type:"King",color:"White")
+
+      expect(white_king).to eq(Piece.where("game_id = ? AND type = 'King' AND color = 0",game.id))
+    end
+  end
 end

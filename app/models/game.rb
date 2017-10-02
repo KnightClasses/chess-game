@@ -35,4 +35,28 @@ class Game < ApplicationRecord
     King.create(game_id: id, x: 5, y: 8, color: "black")
   end
 
+  def clear_current_board
+    Piece.where("game_id = ?",self.id).destroy_all
+  end
+
+  def all_from_current_game(args)
+    Piece.where("game_id = ? AND #{write_sql_search(args)}",self.id)
+  end
+
+  def one_from_current_game(args)
+    Piece.where("game_id = ? AND #{write_sql_search(args)}",self.id).take(1)
+
+  end
+
+  private
+
+  def write_sql_search(args)
+    queries = []
+    queries << (args.fetch(:x,false) ? "x = #{args[:x]}" : "")
+    queries << (args.fetch(:y,false) ? "y = #{args[:y]}" : "")
+    queries << (args.fetch(:type,false) ? "type = '#{args[:type]}'" : "")
+    queries << (args.fetch(:color,false) ? "color = #{(args[:color] == "White" ? 0 : 1)}" : "")
+    full_statement = queries.reduce {|sum,x| x != ""? sum.concat(" AND #{x}") : sum}
+    return full_statement[5..full_statement.length]
+  end
 end
