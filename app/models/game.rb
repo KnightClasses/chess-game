@@ -39,12 +39,12 @@ class Game < ApplicationRecord
     Piece.where("game_id = ?",self.id).destroy_all
   end
 
-  def all_from_current_game(args = {})
+  def find_in_game(args = {})
     return Piece.where("game_id = ?", self.id) if args == {}
     Piece.where("game_id = ? AND #{write_sql_search(args)}",self.id)
   end
 
-  def one_from_current_game(args = {})
+  def find_one_in_game(args = {})
     return Piece.where("game_id = ?", self.id).take(1) if args == {}
     Piece.where("game_id = ? AND #{write_sql_search(args)}",self.id).take(1)
   end
