@@ -45,6 +45,11 @@ RSpec.describe Game, type: :model do
 
       expect(pawns.length).to eq(16)
     end
+    it "should return an array of all the pieces for the game if no parameters given" do
+      game = FactoryGirl.create(:game)
+
+      expect(game.all_from_current_game.length).to eq(32)
+    end
   end
 
   describe "game#one_from_current_game" do

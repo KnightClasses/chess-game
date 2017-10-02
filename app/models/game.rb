@@ -39,13 +39,14 @@ class Game < ApplicationRecord
     Piece.where("game_id = ?",self.id).destroy_all
   end
 
-  def all_from_current_game(args)
+  def all_from_current_game(args = {})
+    return Piece.where("game_id = ?", self.id) if args == {}
     Piece.where("game_id = ? AND #{write_sql_search(args)}",self.id)
   end
 
-  def one_from_current_game(args)
+  def one_from_current_game(args = {})
+    return Piece.where("game_id = ?", self.id).take(1) if args == {}
     Piece.where("game_id = ? AND #{write_sql_search(args)}",self.id).take(1)
-
   end
 
   private
@@ -57,6 +58,6 @@ class Game < ApplicationRecord
     queries << (args.fetch(:type,false) ? "type = '#{args[:type]}'" : "")
     queries << (args.fetch(:color,false) ? "color = #{(args[:color] == "White" ? 0 : 1)}" : "")
     full_statement = queries.reduce {|sum,x| x != ""? sum.concat(" AND #{x}") : sum}
-    return full_statement[5..full_statement.length]
+    full_statement[5..full_statement.length]
   end
 end
