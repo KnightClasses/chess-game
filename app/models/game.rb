@@ -55,8 +55,8 @@ class Game < ApplicationRecord
     queries = []
     queries << (args.fetch(:x,false) ? "x = #{args[:x]}" : "")
     queries << (args.fetch(:y,false) ? "y = #{args[:y]}" : "")
-    queries << (args.fetch(:type,false) ? "type = '#{args[:type]}'" : "")
-    queries << (args.fetch(:color,false) ? "color = #{(args[:color] == "White" ? 0 : 1)}" : "")
+    queries << (args.fetch(:type,false) ? "type = '#{args[:type].capitalize}'" : "")
+    queries << (args.fetch(:color,false) ? "color = #{(args[:color].capitalize == "White" ? 0 : 1)}" : "")
     full_statement = queries.reduce {|sum,x| x != ""? sum.concat(" AND #{x}") : sum}
     full_statement[5..full_statement.length]
   end

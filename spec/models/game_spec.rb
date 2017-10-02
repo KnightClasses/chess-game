@@ -55,7 +55,7 @@ RSpec.describe Game, type: :model do
   describe "game#one_from_current_game" do
     it "should return a single piece from the current game that matches the inputs" do
       game = FactoryGirl.create(:game)
-      white_king = game.one_from_current_game(type:"King",color:"White")
+      white_king = game.one_from_current_game(type:"king",color:"white")
 
       expect(white_king).to eq(Piece.where("game_id = ? AND type = 'King' AND color = 0",game.id))
     end
