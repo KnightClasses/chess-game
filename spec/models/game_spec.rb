@@ -59,5 +59,12 @@ RSpec.describe Game, type: :model do
 
       expect(white_king).to eq(Piece.where("game_id = ? AND type = 'King' AND color = 0",game.id).take)
     end
+
+    it "should return a single piece from the current game that matches the inputs" do
+      game = FactoryGirl.create(:game)
+      white_rook = game.find_one_in_game(type:"rook",color:"white",x:1,y:1)
+
+      expect(white_rook).to eq(Piece.where("game_id = ? AND type = 'Rook' AND color = 0 AND x = 1 AND y = 1",game.id).take)
+    end
   end
 end
