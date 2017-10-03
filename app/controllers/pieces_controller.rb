@@ -23,13 +23,13 @@ class PiecesController < ApplicationController
     req_x = piece_params[:x].to_i
     req_y = piece_params[:y].to_i
 
-    if @piece.same_team?(req_x, req_y, @game.id)
+    if @piece.same_team?(req_x, req_y)
       respond_to do |format|
         format.js { flash[:notice] = "You cannot capture your own piece. Please try again." }
       end
     end
 
-    @piece.move_to!(req_x, req_y, @game.id) if @piece.is_valid?(req_x, req_y) && !@piece.is_obstructed?(req_x, req_y, @game.id) 
+    @piece.move_to!(req_x, req_y) if @piece.is_valid?(req_x, req_y) && !@piece.is_obstructed?(req_x, req_y) 
 
     render json: @piece
   end
