@@ -4,15 +4,15 @@ class Piece < ApplicationRecord
   enum color: {white: 0, black: 1}
 
   # req_x and req_y are coordinates/integers
-  def is_obstructed?(req_x, req_y, current_game_id)
+  def is_obstructed?(req_x, req_y)
     if self.x == req_x # vertical
       h = self.x
       j = self.y
       k = req_y
       if self.y < req_y # up
-        return true if Piece.where("x = ? AND y > ? AND y < ? AND game_id = ?", h, j, k, game_id).present?
+        return true if game.pieces.where("x = ? AND y > ? AND y < ?", h, j, k).present?
       else # down
-        return true if Piece.where("x = ? AND y < ? AND y > ? AND game_id = ?", h, j, k, game_id).present?
+        return true if game.pieces.where("x = ? AND y < ? AND y > ?", h, j, k).present?
       end
 
     elsif self.y == req_y # horizontal
@@ -20,9 +20,9 @@ class Piece < ApplicationRecord
       j = self.x
       k = req_x
       if self.x < req_x # to right
-        return true if Piece.where("y = ? AND x > ? AND x < ? AND game_id = ?", h, j, k, game_id).present?
+        return true if game.pieces.where("y = ? AND x > ? AND x < ?", h, j, k).present?
       else # to left
-        return true if Piece.where("y = ? AND x < ? AND x > ? AND game_id = ?", h, j, k, game_id).present?
+        return true if game.pieces.where("y = ? AND x < ? AND x > ?", h, j, k).present?
       end
 
     elsif (self.x - req_x).abs == (self.y - req_y).abs # diagonal
@@ -33,7 +33,7 @@ class Piece < ApplicationRecord
         while i < (self.x - req_x).abs
           j += 1
           k += 1
-          return true if Piece.where("x = ? AND y = ? AND game_id = ?", j, k, game_id).present?
+          return true if game.pieces.where("x = ? AND y = ?", j, k).present?
           i += 1
         end
       elsif self.x > req_x && self.y < req_y # x decreasing, y increasing
@@ -43,7 +43,7 @@ class Piece < ApplicationRecord
         while i < (self.x - req_x).abs
           j -= 1
           k += 1
-          return true if Piece.where("x = ? AND y = ? AND game_id = ?", j, k, game_id).present?
+          return true if game.pieces.where("x = ? AND y = ?", j, k).present?
           i += 1
         end
       elsif self.x > req_x && self.y > req_y # x decreasing, y decreasing
@@ -53,7 +53,7 @@ class Piece < ApplicationRecord
         while i < (self.x - req_x).abs
           j -= 1
           k -= 1
-          return true if Piece.where("x = ? AND y = ? AND game_id = ?", j, k, game_id).present?
+          return true if game.pieces.where("x = ? AND y = ?", j, k).present?
           i += 1
         end
       else # x increasing, y decreasing
@@ -63,7 +63,7 @@ class Piece < ApplicationRecord
         while i < (self.x - req_x).abs
           j += 1
           k -= 1
-          return true if Piece.where("x = ? AND y = ? AND game_id = ?", j, k, game_id).present?
+          return true if game.pieces.where("x = ? AND y = ?", j, k).present?
           i += 1
         end
       end
@@ -78,9 +78,9 @@ class Piece < ApplicationRecord
     return false
   end
 
-  def move_to!(req_x, req_y, current_game_id)
+  def move_to!(req_x, req_y)
     # return the 2nd piece (if it exists in the clicked cell)
-    blocking_piece = Piece.find_by("x = ? AND y = ? AND game_id = ?", req_x, req_y, current_game_id)
+    blocking_piece = game.pieces.find_by("x = ? AND y = ?", req_x, req_y)
 
     # if there is a 2nd piece,
     if blocking_piece
@@ -99,8 +99,8 @@ class Piece < ApplicationRecord
     end
   end
 
-  def same_team?(req_x, req_y, current_game_id)
-    blocking_piece = Piece.find_by("x = ? AND y = ? AND game_id = ?", req_x, req_y, current_game_id)
+  def same_team?(req_x, req_y)
+    blocking_piece = game.pieces.find_by("x = ? AND y = ?", req_x, req_y)
     return self.color == blocking_piece.color if blocking_piece
   end
 end
