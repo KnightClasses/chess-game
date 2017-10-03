@@ -17,10 +17,6 @@ class PiecesController < ApplicationController
       opposing_color = 'white'
     end
 
-    if @game.in_check?(opposing_color)
-      flash[:notice] = "#{opposing_color.capitalize} is in check."
-    end
-
     if @piece.valid_move?(req_x, req_y)
       @piece.move_to!(req_x, req_y)
     end
