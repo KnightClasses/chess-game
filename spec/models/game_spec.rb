@@ -57,7 +57,7 @@ RSpec.describe Game, type: :model do
       game = FactoryGirl.create(:game)
       white_king = game.find_one_in_game(type:"king",color:"white")
 
-      expect(white_king).to eq(Piece.where("game_id = ? AND type = 'King' AND color = 0",game.id))
+      expect(white_king).to eq(Piece.where("game_id = ? AND type = 'King' AND color = 0",game.id).take)
     end
   end
 end
