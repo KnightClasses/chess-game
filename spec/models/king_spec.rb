@@ -37,7 +37,7 @@ RSpec.describe King, type: :model do
       FactoryGirl.create(:piece, x:5 ,y:4, game_id: game.id)
       king = Piece.where("x = 5 AND y = 4 AND game_id = ?", game.id).take
       
-      expect(king.can_castle?(7)).to eq(true)
+      expect(king.can_castle?(7, king.y)).to eq(true)
     end
 
     it "should not let me castle if I have moved" do
@@ -46,7 +46,7 @@ RSpec.describe King, type: :model do
       FactoryGirl.create(:piece, x:5 ,y:4, game_id: game.id)
       king = Piece.where("x = 5 AND y = 4 AND game_id = ?", game.id).take
       
-      expect(king.can_castle?(1)).to eq(false)
+      expect(king.can_castle?(1, king.y)).to eq(false)
     end
   end
 

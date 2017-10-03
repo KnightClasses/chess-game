@@ -60,4 +60,33 @@ RSpec.describe Game, type: :model do
       expect(white_king).to eq(Piece.where("game_id = ? AND type = 'King' AND color = 0",game.id))
     end
   end
+
+  describe "game#in_check?" do 
+    it "should determine if the king is in check from a bishop" do 
+      game = FactoryGirl.create(:game)
+      game.clear_current_board
+      bishop1 = FactoryGirl.create(:piece, type:Bishop, color:1, x:8, y:3, game_id: game.id)
+      king1 = FactoryGirl.create(:piece, type:King, x:3, y:8, game_id: game.id) #default color:0
+      expect(game.in_check?(king1.color)).to eq(true)
+    end
+
+    it "should determine if the king is in check from a rook" do 
+      game = FactoryGirl.create(:game)
+      game.clear_current_board
+      rook1 = FactoryGirl.create(:piece, type:Rook, color:1, x:8, y:8, game_id: game.id)
+      king1 = FactoryGirl.create(:piece, type:King, x:3, y:8, game_id: game.id) #default color:0
+
+      expect(game.in_check?(king1.color)).to eq(true)
+    end
+
+    it "should determine if the king is not in check from a bishop" do 
+      game = FactoryGirl.create(:game)
+      game.clear_current_board
+      bishop1 = FactoryGirl.create(:piece, type:Bishop, color:1, x:8, y:2, game_id: game.id)
+      king1 = FactoryGirl.create(:piece, type:King, x:3, y:8, game_id: game.id) #default color:0
+
+      expect(game.in_check?(king1.color)).to eq(false)
+    end
+
+  end
 end
