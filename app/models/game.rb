@@ -37,27 +37,29 @@ class Game < ApplicationRecord
 
   def clear_current_board
     Piece.where("game_id = ?",self.id).destroy_all
+  end 
+  def find_in_game(**args)
+    return self.pieces.where(game_id: self.id) if args == {}
+    if args[:type] != nil
+      args[:type] = args[:type].capitalize
+    end
+    if args[:color] != nil
+      args[:color].downcase == "white" ? args[:color] = 0 : args[:color] = 1
+    end
+    self.pieces.where(args,game_id:self.id)
   end
 
-  def find_in_game(args = {})
-    return Piece.where("game_id = ?", self.id) if args == {}
-    Piece.where("game_id = ? AND #{write_sql_search(args)}",self.id)
-  end
-
-  def find_one_in_game(args = {})
-    return Piece.where("game_id = ?", self.id).take(1) if args == {}
-    Piece.where("game_id = ? AND #{write_sql_search(args)}",self.id).take(1)
+  def find_one_in_game(**args)
+    return self.pieces.where(game_id: self.id).take(1) if args == {}
+    if args[:type] != nil
+      args[:type] = args[:type].capitalize
+    end
+    if args[:color] != nil
+      args[:color].downcase == "white" ? args[:color] = 0 : args[:color] = 1
+    end
+    self.pieces.where(args,game_id:self.id).take(1)
   end
 
   private
 
-  def write_sql_search(args)
-    queries = []
-    queries << (args.fetch(:x,false) ? "x = #{args[:x]}" : "")
-    queries << (args.fetch(:y,false) ? "y = #{args[:y]}" : "")
-    queries << (args.fetch(:type,false) ? "type = '#{args[:type].capitalize}'" : "")
-    queries << (args.fetch(:color,false) ? "color = #{(args[:color].capitalize == "White" ? 0 : 1)}" : "")
-    full_statement = queries.reduce {|sum,x| x != ""? sum.concat(" AND #{x}") : sum}
-    full_statement[5..full_statement.length]
-  end
 end
