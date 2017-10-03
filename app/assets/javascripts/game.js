@@ -28,7 +28,7 @@ $(document).ready(function () {
         }
         $.ajax({
           type: 'PATCH',
-          url: ui.draggable.parent().data('update-url'),
+          url: ui.draggable.data('update-url'),
           dataType: 'json',
           data: { 
             piece: piece
