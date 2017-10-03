@@ -19,7 +19,7 @@ class PiecesController < ApplicationController
       opposing_color = 'white'
     end
 
-    if @game.in_check?(@piece.color)
+    if @game.in_check?(opposing_color)
       respond_to do |format|
         format.js { flash[:notice] = "#{opposing_color.capitalize} is in check." }
       end
