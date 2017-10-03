@@ -21,8 +21,9 @@ class King < Piece
   def can_castle?(req_x)
     #returns true if unmoved
     return false if req_x != 7 && req_x != 3
-    castle_rook_x = req_x == 7 ? 8 : 1
-    return true if unmoved(self) && unmoved(Piece.where("game_id = ? AND x = ? AND y = ? and type = 'Rook'",self.game_id,castle_rook_x,self.y).take)
+    castle_rook_x = req_x == 7 ? 8 : 1 
+    return true if unmoved(self) && unmoved(self.game.find_one_in_game(x:castle_rook_x,y:self.y,type:'Rook'))
+    #return true if unmoved(self) && unmoved(Piece.where("game_id = ? AND x = ? AND y = ? and type = 'Rook'",self.game_id,castle_rook_x,self.y).take)
     return false
   end
 
@@ -36,7 +37,8 @@ class King < Piece
     castle_rook_x = req_x == 7 ? 8 : 1
     castle_rook_to_move = req_x == 7 ? 6 : 4
     self.update_attributes(x:req_x)
-    Piece.where("game_id = ? AND x = ? AND y = ? and type = 'Rook'",self.game_id,castle_rook_x,self.y).take.update_attributes(x:castle_rook_to_move)
+    self.game.find_one_in_game(x:castle_rook_x,y:self.y,type:'Rook').update_attributes(x:castle_rook_to_move)
+    #Piece.where("game_id = ? AND x = ? AND y = ? and type = 'Rook'",self.game_id,castle_rook_x,self.y).take.update_attributes(x:castle_rook_to_move)
 
   end
 end

@@ -50,14 +50,14 @@ class Game < ApplicationRecord
   end
 
   def find_one_in_game(**args)
-    return self.pieces.where(game_id: self.id).take(1) if args == {}
+    return self.pieces.where(game_id: self.id).take if args == {}
     if args[:type] != nil
       args[:type] = args[:type].capitalize
     end
     if args[:color] != nil
       args[:color].downcase == "white" ? args[:color] = 0 : args[:color] = 1
     end
-    self.pieces.where(args,game_id:self.id).take(1)
+    self.pieces.where(args,game_id:self.id).take
   end
 
   private
