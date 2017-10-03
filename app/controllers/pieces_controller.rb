@@ -12,18 +12,6 @@ class PiecesController < ApplicationController
     req_x = piece_params[:x].to_i
     req_y = piece_params[:y].to_i
     @piece.move_to!(req_x, req_y, @game.id)
-
-    if color == 'white'
-      opposing_color = 'black'
-    else 
-      opposing_color = 'white'
-    end
-
-    if @game.in_check?(opposing_color)
-      respond_to do |format|
-        format.js { flash[:notice] = "#{opposing_color.capitalize} is in check." }
-      end
-    end
     render json: @piece
   end
 
@@ -35,9 +23,19 @@ class PiecesController < ApplicationController
     req_x = piece_params[:x].to_i
     req_y = piece_params[:y].to_i
 
+    if @piece.color == 'white'
+      opposing_color = 'black'
+    else 
+      opposing_color = 'white'
+    end
+
+    if @game.in_check?(@piece.color) # did moving my piece put my team in check
+      flash[:notice] = "#{@piece.color.capitalize} is in check."
+    end
+
     if @piece.same_team?(req_x, req_y, @game.id)
       respond_to do |format|
-        format.js { flash[:notice] = "You cannot capture your own piece. Please try again." }
+        format.js { flash.now[:notice] = "You cannot capture your own piece. Please try again." }
       end
     end
 

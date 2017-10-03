@@ -28,14 +28,14 @@ $(document).ready(function () {
         }
         $.ajax({
           type: 'PATCH',
-          url: ui.draggable.parent().data('update-url'),
+          url: ui.draggable.data('update-url'),
           dataType: 'json',
           data: { 
             piece: piece
           },
           success: function(){
             location.reload(true);
-            $(".alert alert-info").html("<%= flash[:notice] %>");
+            $(".alert alert-info").html("<%= flash[:notice] %>").effect('highlight',{},1000);;
           },
         });
       }
