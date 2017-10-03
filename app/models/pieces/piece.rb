@@ -91,8 +91,8 @@ class Piece < ApplicationRecord
         # move the 1st piece to the new spot
         self.update(x: req_x, y: req_y)
       end
-    elsif (req_x - self.x).abs == 2 && self.can_castle?(req_x) && self.type == "King"
-      self.castle!(req_x)
+    elsif self.type == "King" && (req_x - self.x).abs == 2
+      self.castle!(req_x) if self.can_castle?(req_x, req_y)
     else
       # if the clicked cell is empty then move the 1st piece there
       self.update(x: req_x, y: req_y)
@@ -103,5 +103,12 @@ class Piece < ApplicationRecord
     blocking_piece = self.game.find_one_in_game(x:req_x,y:req_y)
     #blocking_piece = game.pieces.find_by("x = ? AND y = ?", req_x, req_y)
     return self.color == blocking_piece.color if blocking_piece
+  end
+
+  def valid_move?(req_x, req_y)
+    return false if is_obstructed?(req_x, req_y)
+    return false unless is_valid?(req_x, req_y)
+    return false if same_team?(req_x, req_y)
+    return true
   end
 end
