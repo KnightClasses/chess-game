@@ -81,6 +81,4 @@ class Game < ApplicationRecord
     return false
   end
 
-  private
-
 end

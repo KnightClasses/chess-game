@@ -11,12 +11,6 @@ class PiecesController < ApplicationController
     req_x = piece_params[:x].to_i
     req_y = piece_params[:y].to_i
 
-    if @piece.color == 'white'
-      opposing_color = 'black'
-    else 
-      opposing_color = 'white'
-    end
-
     if @piece.valid_move?(req_x, req_y)
       @piece.move_to!(req_x, req_y)
     end
