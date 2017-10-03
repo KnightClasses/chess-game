@@ -1,5 +1,4 @@
 class PiecesController < ApplicationController
-  before_action :validate_move, only: [:update]
 
   def show
     @piece = Piece.find(params[:id])
@@ -11,28 +10,24 @@ class PiecesController < ApplicationController
     @game = @piece.game
     req_x = piece_params[:x].to_i
     req_y = piece_params[:y].to_i
-    @piece.move_to!(req_x, req_y, @game.id)
+
+    if @piece.color == 'white'
+      opposing_color = 'black'
+    else 
+      opposing_color = 'white'
+    end
+
+    if @game.in_check?(opposing_color)
+      flash[:notice] = "#{opposing_color.capitalize} is in check."
+    end
+
+    if @piece.valid_move?(req_x, req_y)
+      @piece.move_to!(req_x, req_y)
+    end
     render json: @piece
   end
 
   private
-
-  def validate_move
-    @piece = Piece.find(params[:id])
-    @game = @piece.game
-    req_x = piece_params[:x].to_i
-    req_y = piece_params[:y].to_i
-
-    if @piece.same_team?(req_x, req_y)
-      respond_to do |format|
-        format.js { flash[:notice] = "You cannot capture your own piece. Please try again." }
-      end
-    end
-
-    @piece.move_to!(req_x, req_y) if @piece.is_valid?(req_x, req_y) && !@piece.is_obstructed?(req_x, req_y) 
-
-    render json: @piece
-  end
 
   def piece_params
     params.require(:piece).permit(:x, :y)
