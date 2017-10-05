@@ -30,15 +30,13 @@ class King < Piece
   end
 
   def castle!(req_x, req_y)
-    unless self.can_castle?(req_x, req_y) && !self.check? && !self.check?(req_x,req_y)
-      self.update_attributes(x:self.x,y:self.y) 
-      return
+    if self.can_castle?(req_x, req_y) && !self.check? && !self.check?(req_x,req_y)
+      castle_rook_x = req_x == 7 ? 8 : 1
+      castle_rook_to_move = req_x == 7 ? 6 : 4
+      self.update_attributes(x:req_x)
+      self.game.find_one_in_game(x:castle_rook_x,y:self.y,type:'Rook').update_attributes(x:castle_rook_to_move)
+      #Piece.where("game_id = ? AND x = ? AND y = ? and type = 'Rook'",self.game_id,castle_rook_x,self.y).take.update_attributes(x:castle_rook_to_move)
     end
-    castle_rook_x = req_x == 7 ? 8 : 1
-    castle_rook_to_move = req_x == 7 ? 6 : 4
-    self.update_attributes(x:req_x)
-    self.game.find_one_in_game(x:castle_rook_x,y:self.y,type:'Rook').update_attributes(x:castle_rook_to_move)
-    #Piece.where("game_id = ? AND x = ? AND y = ? and type = 'Rook'",self.game_id,castle_rook_x,self.y).take.update_attributes(x:castle_rook_to_move)
   end
 
   def check?(req_x = self.x,req_y = self.y)
