@@ -29,9 +29,7 @@ class King < Piece
   end
 
   def castle!(req_x, req_y)
-    #alter this section when in_check is complete
-    in_check = false
-    unless self.can_castle?(req_x, req_y) || in_check
+    unless self.can_castle?(req_x, req_y) || self.game.in_check?(self.color)k
       self.update_attributes(x:self.x,y:self.y) 
       return
     end
