@@ -29,7 +29,7 @@ class King < Piece
   end
 
   def castle!(req_x, req_y)
-    unless self.can_castle?(req_x, req_y) || self.game.in_check?(self.color)k
+    unless self.can_castle?(req_x, req_y) && !self.game.in_check?(self.color)
       self.update_attributes(x:self.x,y:self.y) 
       return
     end
@@ -38,6 +38,5 @@ class King < Piece
     self.update_attributes(x:req_x)
     self.game.find_one_in_game(x:castle_rook_x,y:self.y,type:'Rook').update_attributes(x:castle_rook_to_move)
     #Piece.where("game_id = ? AND x = ? AND y = ? and type = 'Rook'",self.game_id,castle_rook_x,self.y).take.update_attributes(x:castle_rook_to_move)
-
   end
 end

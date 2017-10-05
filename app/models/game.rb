@@ -80,5 +80,4 @@ class Game < ApplicationRecord
     end
     return false
   end
-
 end

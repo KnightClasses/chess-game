@@ -90,6 +90,17 @@ RSpec.describe King, type: :model do
       expect(king.x).to eq(5)
     end
     it "should NOT let me castle if I am in check" do
+      game = FactoryGirl.create(:game)
+      game.clear_current_board
+      FactoryGirl.create(:piece,type:King,x:5,y:1,game_id: game.id)
+      white_rook = FactoryGirl.create(:piece,type: Rook,x:8,y:1,game_id: game.id)
+      black_rook = FactoryGirl.create(:piece,color:1,type:Rook,x:5,y:8,game_id: game.id)
+      king = Piece.where("x = 5 AND y = 1 AND game_id = ? AND type = 'King'", game.id).take
+      king.castle!(7,king.y)
+      king.reload
+
+      expect(king.x).to eq(5)
+      expect(king.y).to eq(1)
     end
   end
 end
