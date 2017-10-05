@@ -15,5 +15,19 @@ RSpec.describe PiecesController, type: :controller do
       expect(piece.x).to eq(req_x)
       expect(piece.y).to eq(req_y)
     end
+    it "should reject a king movement if it would force it into check" do
+      user = FactoryGirl.create(:user)
+      sign_in user
+      game = FactoryGirl.create(:game)
+      game.clear_current_board
+      FactoryGirl.create(:piece,x:4,y:1,active:true,game_id:game.id)
+      FactoryGirl.create(:piece,type:Rook,active:true,color:1,x:5,y:8,game_id:game.id)
+      king = game.find_one_in_game(x:4,y:1)
+      patch :update, params: { game_id: game.id, id:king.id, piece: {x:5,y:1 } }
+      king.reload
+
+      expect(king.x).to eq(4)
+      expect(king.y).to eq(1)
+    end
   end
 end
