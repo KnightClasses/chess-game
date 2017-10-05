@@ -53,10 +53,11 @@ RSpec.describe King, type: :model do
   describe "King#castle!" do
     it "should let me castle if king and rook are unmoved" do
       game = FactoryGirl.create(:game)
-      FactoryGirl.create(:piece, type: Rook, x: 8, y:4, game_id: game.id)
-      FactoryGirl.create(:piece, x:5 ,y:4, game_id: game.id)
-      rook = Piece.where("x = 8 AND y = 4 AND game_id = ? AND type = 'Rook'", game.id).take
-      king = Piece.where("x = 5 AND y = 4 AND game_id = ?", game.id).take
+      game.clear_current_board
+      FactoryGirl.create(:piece, type: Rook, x: 8, y:1, game_id: game.id,active:true)
+      FactoryGirl.create(:piece, x:5 ,y:1, game_id: game.id,active:true)
+      rook = Piece.where("x = 8 AND y = 1 AND game_id = ? AND type = 'Rook'", game.id).take
+      king = Piece.where("x = 5 AND y = 1 AND game_id = ?", game.id).take
       king.castle!(7, king.y)
       king.reload
       rook.reload
@@ -101,6 +102,44 @@ RSpec.describe King, type: :model do
 
       expect(king.x).to eq(5)
       expect(king.y).to eq(1)
+    end
+  end
+  describe "king#check?" do
+    it "should successfully detect if a movement will end up in check" do
+      game = FactoryGirl.create(:game)
+      game.clear_current_board
+      FactoryGirl.create(:piece,x:4,y:1,active:true,game_id:game.id)
+      FactoryGirl.create(:piece,type:Rook,active:true,color:1,x:5,y:8,game_id:game.id)
+      king = game.find_one_in_game(x:4,y:1)
+      
+      expect(king.check?(5,1)).to eq(true)
+    end
+    it "should successfully detect if I am currently in check" do
+      game = FactoryGirl.create(:game)
+      game.clear_current_board
+      FactoryGirl.create(:piece,x:5,y:1,game_id:game.id)
+      FactoryGirl.create(:piece,type:Rook,color:1,x:5,y:8,game_id:game.id)
+      king = game.find_one_in_game(x:5,y:1)
+      
+      expect(king.check?).to eq(true)
+    end
+    it "should successfully detect if I am NOT in check" do
+      game = FactoryGirl.create(:game)
+      game.clear_current_board
+      FactoryGirl.create(:piece,x:4,y:1,game_id:game.id)
+      FactoryGirl.create(:piece,type:Rook,color:1,x:5,y:8,game_id:game.id)
+      king = game.find_one_in_game(x:4,y:1)
+      
+      expect(king.check?).to eq(false)
+    end
+    it "should return FALSE if the movement will NOT land me in check" do
+      game = FactoryGirl.create(:game)
+      game.clear_current_board
+      FactoryGirl.create(:piece,x:6,y:1,active:true,game_id:game.id)
+      FactoryGirl.create(:piece,active:true,type:Rook,color:1,x:5,y:8,game_id:game.id)
+      king = game.find_one_in_game(x:6,y:1)
+      
+      expect(king.check?(7,1)).to eq(false)
     end
   end
 end
