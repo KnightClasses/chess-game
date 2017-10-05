@@ -92,7 +92,7 @@ class Piece < ApplicationRecord
         self.update(x: req_x, y: req_y)
       end
     elsif self.type == "King" && (req_x - self.x).abs == 2
-      self.castle!(req_x) if self.can_castle?(req_x, req_y)
+      self.castle!(req_x, req_y) 
     else
       # if the clicked cell is empty then move the 1st piece there
       self.update(x: req_x, y: req_y)
