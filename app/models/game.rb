@@ -83,7 +83,7 @@ class Game < ApplicationRecord
   end
 
   def initial_player_turn
-    self.update(player_turn: game.white_player_id)
+    self.update(player_turn: self.white_player_id)
   end
 
   def change_player_turn
