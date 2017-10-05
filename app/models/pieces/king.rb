@@ -40,10 +40,10 @@ class King < Piece
   end
 
   def check?(req_x = self.x,req_y = self.y)
-    opp_color = self.color == "white" ? "black" : "white"
+    opposing_color = self.color == "white" ? "black" : "white"
 
     #iterate through the opposing pieces for check on the king
-    pieces = self.game.find_in_game(color: opp_color, active: true).to_a
+    pieces = self.game.find_in_game(color: opposing_color, active: true).to_a
     pieces.each do |piece|
       if piece.valid_move?(req_x, req_y)
         return true

@@ -2,7 +2,7 @@ class Game < ApplicationRecord
   belongs_to :user, :foreign_key => "white_player_id"
   has_many :pieces
   scope :available, -> { where(black_player_id: nil) }
-  after_create :populate_game!
+  after_create :populate_game!, :initial_player_turn
 
   def populate_game!
     1.upto(8) do |x_pos|
@@ -38,6 +38,7 @@ class Game < ApplicationRecord
   def clear_current_board
     Piece.where("game_id = ?",self.id).destroy_all
   end 
+
   def find_in_game(**args)
     return self.pieces.where(game_id: self.id) if args == {}
     if args[:type] != nil
@@ -79,5 +80,14 @@ class Game < ApplicationRecord
       end
     end
     return false
+  end
+
+  def initial_player_turn
+    self.update(player_turn: game.white_player_id)
+  end
+
+  def change_player_turn
+    other_player = self.player_turn == self.white_player_id ? self.black_player_id : self.white_player_id
+    self.update(player_turn: other_player)
   end
 end

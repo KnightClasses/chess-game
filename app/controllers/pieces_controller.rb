@@ -13,6 +13,7 @@ class PiecesController < ApplicationController
 
     if @piece.valid_move?(req_x, req_y)
       @piece.move_to!(req_x, req_y)
+      @game.change_player_turn # could go inside move_to
     end
     render json: @piece
   end
