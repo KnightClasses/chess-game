@@ -92,6 +92,7 @@
     <div class="btn btn-primary">
       <%= link_to "White: Forfeit Game", active_game_path(@game, user_id: @game.white_player_id), method: :patch %>
     </div>
+    <br />
+    <h1><%= @game.player_turn_color %> to move</h1>
   </div>
-
 </div>
