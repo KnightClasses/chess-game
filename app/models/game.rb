@@ -90,4 +90,9 @@ class Game < ApplicationRecord
     other_player = self.player_turn == self.white_player_id ? self.black_player_id : self.white_player_id
     self.update(player_turn: other_player)
   end
+
+  def player_turn_color
+    white = self.white_player_id
+    self.player_turn == white ? "White" : "Black"
+  end
 end
