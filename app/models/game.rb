@@ -93,6 +93,6 @@ class Game < ApplicationRecord
 
   def player_turn_color
     white = self.white_player_id
-    self.player_turn == white ? "White" : "Black"
+    self.player_turn == white ? "white" : "black"
   end
 end

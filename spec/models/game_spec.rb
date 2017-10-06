@@ -89,7 +89,7 @@ RSpec.describe Game, type: :model do
     it "should give the color of the player whose turn it currently is" do
       game = FactoryGirl.create(:game)
 
-      expect(game.player_turn_color).to eq("White")
+      expect(game.player_turn_color).to eq("white")
     end
   end
 end

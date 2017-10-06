@@ -11,7 +11,7 @@ class PiecesController < ApplicationController
     req_x = piece_params[:x].to_i
     req_y = piece_params[:y].to_i
 
-    if @piece.valid_move?(req_x, req_y)
+    if @piece.valid_move?(req_x, req_y) && @game.player_turn_color == @piece.color
       @piece.move_to!(req_x, req_y)
       @game.change_player_turn # could go inside move_to
     end
