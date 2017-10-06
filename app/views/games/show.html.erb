@@ -28,7 +28,7 @@
             <% if piece.present? %>
             <%# if piece present at x-y, create: cell color/id div, div link and piece image %>
               <div class=<%= "#{cell_color}" %> id=<%= "#{x}-#{y}" %> data-x=<%= "#{x}" %> data-y=<%= "#{y}" %> >
-                <div class="pieces" data-update-url=<%= "#{game_piece_path(@game, piece)}" %> >
+                <div class="pieces" data-type=<%= "#{piece.type}" %> data-color=<%= "#{piece.color}" %> data-update-url=<%= "#{game_piece_path(@game, piece)}" %> >
                   <% piece_color = piece.color.downcase %>
                   <% piece_type = piece.type.downcase %>
                   <% pieceX = piece.x %>
@@ -55,15 +55,17 @@
         <%= image_tag("#{captured_piece.color.downcase}_#{captured_piece.type.downcase}.png", height: '45', width: '45') %>
       <% end %>
     </div>
-    <div>
-      <% if @game.pieces.where("type = 'King' AND color = 1").take.can_castle?(7, 8) || @game.pieces.where("type = 'King' AND color = 1").take.can_castle?(3, 8) %>
-        <h3>Black can castle</h3>
-      <% end %>
-    </div>
-    <div>
-      <% if @game.in_check?('black') %>
-        <h3>Black king is in check</h3>
-      <% end %>
+    <div class="black messages">
+      <div>
+        <% if @game.pieces.where("type = 'King' AND color = 1").take.can_castle?(7, 8) || @game.pieces.where("type = 'King' AND color = 1").take.can_castle?(3, 8) %>
+          <h3>Black can castle</h3>
+        <% end %>
+      </div>
+      <div>
+        <% if @game.in_check?('black') %>
+          <h3>Black king is in check</h3>
+        <% end %>
+      </div>
     </div>
     <div class="btn btn-primary">
       <%= link_to "Black: Forfeit Game", active_game_path(@game, user_id: @game.black_player_id), method: :patch %>
@@ -79,16 +81,19 @@
         <%= image_tag("#{captured_piece.color.downcase}_#{captured_piece.type.downcase}.png", height: '45', width: '45') %>
       <% end %>
     </div>
-    <div>
-      <% if @game.pieces.where("type = 'King' AND color = 0").take.can_castle?(7, 1) || @game.pieces.where("type = 'King' AND color = 0").take.can_castle?(3, 1) %>
-        <h3>White can castle</h3>
-      <% end %>
+    <div class="white messages">
+      <div>
+        <% if @game.pieces.where("type = 'King' AND color = 0").take.can_castle?(7, 1) || @game.pieces.where("type = 'King' AND color = 0").take.can_castle?(3, 1) %>
+          <h3>White can castle</h3>
+        <% end %>
+      </div>
+      <div>
+        <% if @game.in_check?('white') %>
+          <h3>White king is in check</h3>
+        <% end %>
+      </div>
     </div>
-    <div>
-      <% if @game.in_check?('white') %>
-        <h3>White king is in check</h3>
-      <% end %>
-    </div>
+
     <div class="btn btn-primary">
       <%= link_to "White: Forfeit Game", active_game_path(@game, user_id: @game.white_player_id), method: :patch %>
     </div>
