@@ -30,7 +30,7 @@ $(document).ready(function () {
           type: type,
           color: color
         }
-        if (( type == "pawn" && y == 1 ) || ( type == "pawn" && y == 8 )) {
+        if ( y == 1 || y == 8 ) {
           alert("promote pawn?");
           // 1. Create the button
           var button = document.createElement("button");
