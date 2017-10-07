@@ -96,24 +96,16 @@ class Game < ApplicationRecord
     self.player_turn == white ? "white" : "black"
   end
 
-  def threatening_pieces?(color) ## finds all pieces that are holding the king(color) in check
-    if color == 'white'
-      opposing_color = 'black'
-    else
-      opposing_color = 'white'
-    end
-
+  def checkmate?(color)
     king = self.pieces.find_by(type: "King", color: color)
-    threatening_pieces = []
 
-    #iterate through the opposing pieces for check on the king
-    pieces = self.pieces.where(color: opposing_color, active: true).to_a
-    pieces.each do |piece|
-      if piece.valid_move?(king.x, king.y)
-        threatening_pieces << piece
+    if king.check?
+      if king_can_move_and_prevent_checkmate?(color) ||
+        (threatening_piece_may_be_captured_by_teammate?(color) && threatening_pieces?(color).count == 1 && player_turn_color == color)
+        return false
       end
+      return true
     end
-    return threatening_pieces
   end
 
   def king_can_move_and_prevent_checkmate?(color)
@@ -139,17 +131,24 @@ class Game < ApplicationRecord
     return false ## no such safe spot exists for the king to move itself to
   end
 
-  def checkmate?(color)
-    king = self.pieces.find_by(type: "King", color: color)
-    # game = king.game`
-
-    if king.check?
-      if king_can_move_and_prevent_checkmate?(color) ||
-        (threatening_piece_may_be_captured_by_teammate?(color) && threatening_pieces?(color).count == 1 && player_turn_color == color)
-        return false
-      end
-      return true
+  def threatening_pieces?(color) ## finds all pieces that are holding the king(color) in check
+    if color == 'white'
+      opposing_color = 'black'
+    else
+      opposing_color = 'white'
     end
+
+    king = self.pieces.find_by(type: "King", color: color)
+    threatening_pieces = []
+
+    #iterate through the opposing pieces for check on the king
+    pieces = self.pieces.where(color: opposing_color, active: true).to_a
+    pieces.each do |piece|
+      if piece.valid_move?(king.x, king.y)
+        threatening_pieces << piece
+      end
+    end
+    return threatening_pieces
   end
 
   def threatening_piece_may_be_captured_by_teammate?(color)
@@ -170,34 +169,6 @@ class Game < ApplicationRecord
   end
 
   def threatening_piece_may_be_blocked_by_teammate?(color)
-    # ghost_piece = Piece.create(game_id: game_id)
 
-    # go through each cell on the gameboard
-    # (1..8).each do |row|
-    #   (1..8).each do |column|
-        # if having a piece from your own team in this cell changes the condition of king.checkmate? to false,
-        # ghost_piece.x = row
-        # ghost_piece.y = column
-        # if game.checkmate?(color) == false
-        #   #   cycle thru all valid pieces
-        #   pieces = game.find_in_game(color: color, active: true).to_a
-        #   pieces.each do |piece|
-        #     #   check each piece see if piece.valid_move?
-        #     if piece.valid_move?(row, column)
-        #       #   if TRUE, then return true
-        #       return true
-        #     end
-        #   end
-        #   return false
-        # end
-    #   end
-    # end
-    # pieces = self.game.find_in_game(color: opposing_color, active: true).to_a
-    # pieces.each do |piece|
-    #   if piece.valid_move?(req_x, req_y)
-    #     return true
-    #   end
-    # end
-    # return false
   end
 end

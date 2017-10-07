@@ -9,4 +9,8 @@ class Rook < Piece
 
     return false
   end
+
+  def capture_path
+
+  end
 end

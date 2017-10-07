@@ -5,8 +5,12 @@ class Bishop < Piece
   end
 
   def is_valid?(req_x, req_y)
-    return true if (self.x - req_x).abs == (self.y - req_y).abs 
+    return true if (self.x - req_x).abs == (self.y - req_y).abs
 
     return false
+  end
+
+  def capture_path
+
   end
 end

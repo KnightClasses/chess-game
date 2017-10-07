@@ -12,17 +12,7 @@ class Queen < Piece
     end
   end
 
-  # def capture_path
-  #   paths = {
-  #     north: [], "northeast", "east", "southeast", "south", "southwest", "west", "northwest"]}
-  #
-  #   north = []
-  #   east = []
-  #   south = []
-  #   west = []
-  #   northeast = []
-  #   southeast = []
-  #   southwest = []
-  #   northwest = []
-  # end
+  def capture_path
+
+  end
 end
