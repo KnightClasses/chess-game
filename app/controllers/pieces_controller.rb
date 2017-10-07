@@ -19,11 +19,18 @@ class PiecesController < ApplicationController
   end
 
   def promote_pawn
+    @piece = Piece.find(params[:id])
+    @game = @piece.game
+
+    if @piece.type == "Pawn" && (@piece.color == "white" && @piece.y == 8 || @piece.color == "black" && @piece.y == 1)
+      @piece.update_attributes(type:piece_params[:type]) 
+    end
+    render json: @piece
   end
 
   private
 
   def piece_params
-    params.require(:piece).permit(:x, :y)
+    params.require(:piece).permit(:x, :y, :type)
   end
 end
