@@ -22,4 +22,9 @@ class Pawn < Piece
     end
   return false
   end
+
+  def promote_pawn(req_x, req_y)
+    if self.color == "white" && req_y == 8
+    end
+  end
 end
