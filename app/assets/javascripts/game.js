@@ -51,7 +51,7 @@ $(document).ready(function () {
               .done(function() {
                 location.reload(true);
               });
-              var chessPieces = ['Queen', 'Bishop', 'Knight', 'Pawn', 'Rook']
+              var chessPieces = ['Queen', 'Bishop', 'Knight', 'Rook']
               $.each(chessPieces, function(i, val) {
                 var button='<button type="button" class="btn btn-primary" id="'+ this + '">'+ this +'</button>';
                 $("#pawnPromote").append(button);
