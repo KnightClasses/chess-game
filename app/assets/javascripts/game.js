@@ -56,19 +56,23 @@ $(document).ready(function () {
                 var button='<button type="button" class="btn btn-primary" id="'+ this + '">'+ this +'</button>';
                 $("#pawnPromote").append(button);
               });
-              $( "#Queen" ).click(function() {
-                $.ajax({
-                  type: 'PATCH',
-                  url: ui.draggable.data('update-url') + "/promote_pawn",
-                  dataType: 'json',
-                  data: {
-                    piece: {
-                      type: "Queen"
+              $.each(chessPieces, function(i, val) {
+                var pieceName = this;
+                console.log("#" + this);
+                $( "#" + this ).click(function() {
+                  $.ajax({
+                    type: 'PATCH',
+                    url: ui.draggable.data('update-url') + "/promote_pawn",
+                    dataType: 'json',
+                    data: {
+                      piece: {
+                        type: pieceName
+                      }
                     }
-                  }
+                  });
+                  alert( "Handler for .click() called." );
+                  dfd.resolve();
                 });
-                alert( "Handler for .click() called." );
-                dfd.resolve();
               });
             } else {
                 location.reload(true);
