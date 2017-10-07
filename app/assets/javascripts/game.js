@@ -43,7 +43,14 @@ $(document).ready(function () {
             piece: piece
           },
           success: function(){
+
             if ( ( y == 1 || y == 8 ) && ( type == "Pawn" ) ) {
+              var dfd = $.Deferred();
+              dfd
+
+              .done(function() {
+                location.reload(true);
+              });
               var chessPieces = ['Queen', 'Bishop', 'Knight', 'Pawn', 'Rook']
               $.each(chessPieces, function(i, val) {
                 var button='<button type="button" class="btn btn-primary" id="'+ this + '">'+ this +'</button>';
@@ -51,12 +58,15 @@ $(document).ready(function () {
               });
               $( "#Queen" ).click(function() {
                 alert( "Handler for .click() called." );
+                dfd.resolve();
               });
-            };
-            location.reload(true);
-            $(".alert alert-info").html("<%= flash[:notice] %>");
+            } else {
+                location.reload(true);
+                $(".alert alert-info").html("<%= flash[:notice] %>");
+            }
           },
         });
+
       }
     });
   });
