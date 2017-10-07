@@ -22,15 +22,20 @@ $(document).ready(function () {
         });
         var x = $(event.target).data("x");
         var y = $(event.target).data("y");
-        var type = $(event.target).data("type");
-        var color = $(event.target).data("color");
+        var type = ui.draggable.data("type");
+        var color = ui.draggable.data("color");
         var piece = {
           x: x,
           y: y,
           type: type,
           color: color
         }
-        if ( y == 1 || y == 8 ) {
+        console.log(x);
+        console.log(y);
+        console.log(type);
+        console.log(color);
+
+        if ( ( y == 1 || y == 8 ) && ( type == "Pawn" ) ) {
           alert("promote pawn?");
           // 1. Create the button
           var button = document.createElement("button");

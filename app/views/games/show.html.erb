@@ -28,7 +28,7 @@
             <% if piece.present? %>
             <%# if piece present at x-y, create: cell color/id div, div link and piece image %>
               <div class=<%= "#{cell_color}" %> id=<%= "#{x}-#{y}" %> data-x=<%= "#{x}" %> data-y=<%= "#{y}" %> >
-                <div class="pieces" data-type=<%= "#{piece.type}" %> data-update-url=<%= "#{game_piece_path(@game, piece)}" %> >
+                <div class="pieces" data-type=<%= "#{piece.type}" %> data-color=<%= "#{piece.color}" %> data-update-url=<%= "#{game_piece_path(@game, piece)}" %> >
                   <% piece_color = piece.color.downcase %>
                   <% piece_type = piece.type.downcase %>
                   <% pieceX = piece.x %>
