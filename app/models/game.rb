@@ -130,7 +130,7 @@ class Game < ApplicationRecord
       (left..right).each do |row|
         (bottom..top).each do |column|
           # if moving to the spot is valid,
-          if king.is_valid?(row, column) && !king.off_board?(row, column)
+          if king.valid_move?(row, column)
             # and if moving to any of the spots results in NOT being in check,
             if !king.check?(row, column)
               return false
@@ -139,9 +139,6 @@ class Game < ApplicationRecord
         end
       end
       if (game.threatening_piece_may_be_captured_by_teammate?(color) && threatening_pieces?(color).count == 1)
-        # && threatening_pieces?(color).count > 1)
-      # if there is more than one threatening piece, then it is checkmate
-
         return false
       end
       return true
