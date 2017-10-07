@@ -40,4 +40,18 @@ RSpec.describe PiecesController, type: :controller do
       expect(pawn.y).to eq(8)
     end
   end
+  describe "pieces#promote_pawn" do
+    it "should allow us to promote the pawn if promotable" do
+      game = FactoryGirl.create(:game)
+      game.clear_current_board
+      FactoryGirl.create(:piece,type:Pawn,x:8,y:7,game_id:game.id)
+      FactoryGirl.create(:piece,type:Queen,x:1,y:1,game_id:game.id)
+      pawn = game.find_one_in_game(type:"Pawn",color:"White",x:8,y:7)
+      patch :update, params: { game_id: game.id, id: pawn.id, piece: {x:8,y:8} }
+      patch :promote_pawn, params: { game_id: game.id, id: pawn.id, piece: {type:"Queen" } } 
+      queens = game.find_in_game(type:"Queen",color:"White")
+
+      expect(queens.count).to eq(2)
+    end
+  end
 end

@@ -22,9 +22,13 @@ $(document).ready(function () {
         });
         var x = $(event.target).data("x");
         var y = $(event.target).data("y");
+        var type = ui.draggable.data("type");
+        var color = ui.draggable.data("color");
         var piece = {
           x: x,
-          y: y
+          y: y,
+          type: type,
+          color: color
         }
         $.ajax({
           type: 'PATCH',
@@ -34,10 +38,42 @@ $(document).ready(function () {
             piece: piece
           },
           success: function(){
-            location.reload(true);
-            $(".alert alert-info").html("<%= flash[:notice] %>");
+
+            if ( ( y == 1 || y == 8 ) && ( type == "Pawn" ) ) {
+              var dfd = $.Deferred();
+              dfd
+
+              .done(function() {
+                location.reload(true);
+              });
+              var chessPieces = ['Queen', 'Bishop', 'Knight', 'Rook']
+              $.each(chessPieces, function(i, val) {
+                var button='<button type="button" class="btn btn-primary" id="'+ this + '">'+ this +'</button>';
+                $("#pawnPromote").append(button);
+              });
+              $.each(chessPieces, function(i, val) {
+                var pieceName = this;
+                $( "#" + this ).click(function() {
+                  $.ajax({
+                    type: 'PATCH',
+                    url: ui.draggable.data('update-url') + "/promote_pawn",
+                    dataType: 'json',
+                    data: {
+                      piece: {
+                        type: pieceName
+                      }
+                    }
+                  });
+                  dfd.resolve();
+                });
+              });
+            } else {
+                location.reload(true);
+                $(".alert alert-info").html("<%= flash[:notice] %>");
+            }
           },
         });
+
       }
     });
   });
