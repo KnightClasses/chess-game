@@ -36,20 +36,14 @@ $(document).ready(function () {
         console.log(color);
 
         if ( ( y == 1 || y == 8 ) && ( type == "Pawn" ) ) {
-          alert("promote pawn?");
-          // 1. Create the button
-          var button = document.createElement("button");
-          button.innerHTML = "Do Something";
+          var chessPieces = ['Queen', 'Bishop', 'Knight', 'Pawn', 'Rook']
+          $.each(chessPieces, function(i, val) {
+            console.log(val);
 
-          // 2. Append somewhere
-          var body = document.getElementsByClassName("black messages")[0];
-          body.appendChild(button);
-
-          // 3. Add event handler
-          button.addEventListener ("click", function() {
-            alert("did something");
+            var button='<button type="button" class="btn btn-primary">'+ this +'</button>';
+            $("#pawnPromote").append(button);
           });
-        }
+        };
 
         $.ajax({
           type: 'PATCH',
