@@ -37,12 +37,8 @@ class Game < ApplicationRecord
 
   def clear_current_board
     Piece.where("game_id = ?",self.id).destroy_all
-<<<<<<< HEAD
-  end
-=======
   end
 
->>>>>>> master
   def find_in_game(**args)
     return self.pieces.where(game_id: self.id) if args == {}
     if args[:type] != nil
@@ -98,5 +94,34 @@ class Game < ApplicationRecord
   def player_turn_color
     white = self.white_player_id
     self.player_turn == white ? "white" : "black"
+  end
+
+  def checkmate?(color)
+    king = self.pieces.find_by(type: "King", color: color)
+    game = king.game
+
+    if king.check? ## if king is in check,
+      #iterate through all possible moves (9 possible moves in perimeter of king) for checkmate
+      x = king.x
+      y = king.y
+      left = king.x - 1
+      right = king.x + 1
+      bottom = king.y - 1
+      top = king.y + 1
+
+      (left..right).each do |row|
+        (bottom..top).each do |column|
+          # if moving to the spot is valid,
+          if king.is_valid?(row, column) && !king.off_board?(row, column)
+            # and if moving to any of the spots results in NOT being in check,
+            if !king.check?(row, column)
+              return false
+            end
+          end
+        end
+      end
+      # if the loop gets here without returning false, it means all the possible moves result in checkmate
+      return true
+    end
   end
 end
