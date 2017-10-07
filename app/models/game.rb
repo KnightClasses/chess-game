@@ -116,29 +116,36 @@ class Game < ApplicationRecord
     return threatening_pieces
   end
 
-  def checkmate?(color)
+  def king_can_move_and_prevent_checkmate?(color)
     king = self.pieces.find_by(type: "King", color: color)
-    game = king.game
 
-    if king.check? ## if king is in check,
-      #iterate through all possible moves (9 possible moves in perimeter of king) for checkmate
-      left = king.x - 1
-      right = king.x + 1
-      bottom = king.y - 1
-      top = king.y + 1
+    #iterate through all possible moves (8 possible moves in perimeter of king) for a safe spot (no checkmate)
+    left = king.x - 1
+    right = king.x + 1
+    bottom = king.y - 1
+    top = king.y + 1
 
-      (left..right).each do |row|
-        (bottom..top).each do |column|
-          # if moving to the spot is valid,
-          if king.valid_move?(row, column)
-            # and if moving to any of the spots results in NOT being in check,
-            if !king.check?(row, column)
-              return false
-            end
+    (left..right).each do |row|
+      (bottom..top).each do |column|
+        # if moving to the spot is valid,
+        if king.valid_move?(row, column)
+          # and if moving to any of the spots results in NOT being in check,
+          if !king.check?(row, column)
+            return true ## king can safely move there
           end
         end
       end
-      if (game.threatening_piece_may_be_captured_by_teammate?(color) && threatening_pieces?(color).count == 1)
+    end
+    return false ## no such safe spot exists for the king to move itself to
+  end
+
+  def checkmate?(color)
+    king = self.pieces.find_by(type: "King", color: color)
+    # game = king.game`
+
+    if king.check?
+      if king_can_move_and_prevent_checkmate?(color) ||
+        (threatening_piece_may_be_captured_by_teammate?(color) && threatening_pieces?(color).count == 1 && player_turn_color == color)
         return false
       end
       return true
