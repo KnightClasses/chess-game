@@ -18,6 +18,9 @@ class PiecesController < ApplicationController
     render json: @piece
   end
 
+  def promote_pawn
+  end
+
   private
 
   def piece_params
