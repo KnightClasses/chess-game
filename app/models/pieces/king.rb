@@ -40,39 +40,15 @@ class King < Piece
   end
 
   def check?(req_x = self.x,req_y = self.y)
-    opp_color = self.color == "white" ? "black" : "white"
+  opp_color = self.color == "white" ? "black" : "white"
 
-    #iterate through the opposing pieces for check on the king
-    pieces = self.game.find_in_game(color: opp_color, active: true).to_a
-    pieces.each do |piece|
-      if piece.valid_move?(req_x, req_y)
-        return true
-      end
-    end
-    return false
-  end
-
-  def checkmate?
-    if self.check? ## if king is in check,
-      #iterate through all possible moves (9 possible moves in perimeter of king) for checkmate
-      left = self.x - 1
-      right = self.x + 1
-      bottom = self.y - 1
-      top = self.y + 1
-
-      (left..right).each do |row|
-        (bottom..top).each do |column|
-          # if moving to the spot is valid,
-          if self.is_valid?(row, column)
-            # and if moving to any of the spots results in NOT being in check,
-            if !self.check?(row, column)
-              return false
-            end
-          end
-        end
-      end
-      # if the loop gets here without returning false, it means all the possible moves result in checkmate
+  #iterate through the opposing pieces for check on the king
+  pieces = self.game.find_in_game(color: opp_color, active: true).to_a
+  pieces.each do |piece|
+    if piece.valid_move?(req_x, req_y)
       return true
     end
   end
+  return false
+end
 end
