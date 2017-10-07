@@ -30,11 +30,6 @@ $(document).ready(function () {
           type: type,
           color: color
         }
-        console.log(x);
-        console.log(y);
-        console.log(type);
-        console.log(color);
-
         $.ajax({
           type: 'PATCH',
           url: ui.draggable.data('update-url'),
@@ -58,7 +53,6 @@ $(document).ready(function () {
               });
               $.each(chessPieces, function(i, val) {
                 var pieceName = this;
-                console.log("#" + this);
                 $( "#" + this ).click(function() {
                   $.ajax({
                     type: 'PATCH',
