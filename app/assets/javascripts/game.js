@@ -46,8 +46,11 @@ $(document).ready(function () {
             if ( ( y == 1 || y == 8 ) && ( type == "Pawn" ) ) {
               var chessPieces = ['Queen', 'Bishop', 'Knight', 'Pawn', 'Rook']
               $.each(chessPieces, function(i, val) {
-                var button='<button type="button" class="btn btn-primary">'+ this +'</button>';
+                var button='<button type="button" class="btn btn-primary" id="'+ this + '">'+ this +'</button>';
                 $("#pawnPromote").append(button);
+              });
+              $( "#Queen" ).click(function() {
+                alert( "Handler for .click() called." );
               });
             };
             location.reload(true);
