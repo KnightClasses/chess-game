@@ -82,8 +82,21 @@ class Game < ApplicationRecord
     return false
   end
 
-  def threatening_pieces?(color)
-    # find the king with the given color
+  def initial_player_turn
+    self.update(player_turn: self.white_player_id)
+  end
+
+  def change_player_turn
+    other_player = self.player_turn == self.white_player_id ? self.black_player_id : self.white_player_id
+    self.update(player_turn: other_player)
+  end
+
+  def player_turn_color
+    white = self.white_player_id
+    self.player_turn == white ? "white" : "black"
+  end
+
+  def threatening_pieces?(color) ## finds all pieces that are holding the king(color) in check
     if color == 'white'
       opposing_color = 'black'
     else
@@ -103,28 +116,12 @@ class Game < ApplicationRecord
     return threatening_pieces
   end
 
-  def initial_player_turn
-    self.update(player_turn: self.white_player_id)
-  end
-
-  def change_player_turn
-    other_player = self.player_turn == self.white_player_id ? self.black_player_id : self.white_player_id
-    self.update(player_turn: other_player)
-  end
-
-  def player_turn_color
-    white = self.white_player_id
-    self.player_turn == white ? "white" : "black"
-  end
-
   def checkmate?(color)
     king = self.pieces.find_by(type: "King", color: color)
     game = king.game
 
     if king.check? ## if king is in check,
       #iterate through all possible moves (9 possible moves in perimeter of king) for checkmate
-      x = king.x
-      y = king.y
       left = king.x - 1
       right = king.x + 1
       bottom = king.y - 1
@@ -141,7 +138,12 @@ class Game < ApplicationRecord
           end
         end
       end
-      return false if game.threatening_piece_may_be_captured_by_teammate?(color) && color == player_turn_color
+      if (game.threatening_piece_may_be_captured_by_teammate?(color) && threatening_pieces?(color).count == 1)
+        # && threatening_pieces?(color).count > 1)
+      # if there is more than one threatening piece, then it is checkmate
+
+        return false
+      end
       return true
     end
   end
