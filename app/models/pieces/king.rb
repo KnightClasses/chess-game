@@ -23,7 +23,7 @@ class King < Piece
     #returns true if unmoved
     return false if req_x != 7 && req_x != 3
     return false if req_y != self.y
-    castle_rook_x = req_x == 7 ? 8 : 1 
+    castle_rook_x = req_x == 7 ? 8 : 1
     return true if unmoved(self) && unmoved(self.game.find_one_in_game(x:castle_rook_x,y:self.y,type:'Rook'))
     #return true if unmoved(self) && unmoved(Piece.where("game_id = ? AND x = ? AND y = ? and type = 'Rook'",self.game_id,castle_rook_x,self.y).take)
     return false
@@ -50,5 +50,29 @@ class King < Piece
       end
     end
     return false
+  end
+
+  def checkmate?
+    if self.check? ## if king is in check,
+      #iterate through all possible moves (9 possible moves in perimeter of king) for checkmate
+      left = self.x - 1
+      right = self.x + 1
+      bottom = self.y - 1
+      top = self.y + 1
+
+      (left..right).each do |row|
+        (bottom..top).each do |column|
+          # if moving to the spot is valid,
+          if self.is_valid?(row, column)
+            # and if moving to any of the spots results in NOT being in check,
+            if !self.check?(row, column)
+              return false
+            end
+          end
+        end
+      end
+      # if the loop gets here without returning false, it means all the possible moves result in checkmate
+      return true
+    end
   end
 end
