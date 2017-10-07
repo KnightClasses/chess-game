@@ -141,19 +141,18 @@ class Game < ApplicationRecord
           end
         end
       end
-      return false if game.can_be_saved_by_teammate?(color)
+      return false if game.threatening_piece_may_be_captured_by_teammate?(color) && color == player_turn_color
       return true
     end
   end
 
-  def can_be_saved_by_teammate?(color)
+  def threatening_piece_may_be_captured_by_teammate?(color)
     king = self.pieces.find_by(type: "King", color: color)
     game = king.game
     game_id = game.id
-
     pieces = king.game.find_in_game(color: color, active: true).to_a
-
     threatening_pieces = threatening_pieces?(color)
+
     threatening_pieces.each do |threatening_piece|
       pieces.each do |piece|
         if piece.valid_move?(threatening_piece.x, threatening_piece.y)
@@ -162,7 +161,9 @@ class Game < ApplicationRecord
       end
     end
     return false
+  end
 
+  def threatening_piece_may_be_blocked_by_teammate?(color)
     # ghost_piece = Piece.create(game_id: game_id)
 
     # go through each cell on the gameboard
