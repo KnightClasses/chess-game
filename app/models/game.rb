@@ -99,7 +99,7 @@ class Game < ApplicationRecord
         (bottom..top).each do |column|
           # if moving to the spot is valid,
 
-          if @king.is_valid?(row, column)
+          if @king.is_valid?(row, column) && !@king.off_board?(row, column)
             # and if moving to any of the spots results in NOT being in check,
             if !@king.check?(row, column)
               return false
