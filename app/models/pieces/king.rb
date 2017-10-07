@@ -51,4 +51,6 @@ class King < Piece
     end
     return false
   end
+
+  
 end

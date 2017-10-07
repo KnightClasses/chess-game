@@ -82,6 +82,27 @@ class Game < ApplicationRecord
     return false
   end
 
+  def threatening_pieces?(color)
+    # find the king with the given color
+    if color == 'white'
+      opposing_color = 'black'
+    else
+      opposing_color = 'white'
+    end
+
+    king = self.pieces.find_by(type: "King", color: color)
+    threatening_pieces = []
+
+    #iterate through the opposing pieces for check on the king
+    pieces = self.pieces.where(color: opposing_color, active: true).to_a
+    pieces.each do |piece|
+      if piece.valid_move?(king.x, king.y)
+        threatening_pieces << piece
+      end
+    end
+    return threatening_pieces
+  end
+
   def initial_player_turn
     self.update(player_turn: self.white_player_id)
   end
@@ -120,8 +141,56 @@ class Game < ApplicationRecord
           end
         end
       end
-      # if the loop gets here without returning false, it means all the possible moves result in checkmate
+      return false if game.can_be_saved_by_teammate?(color)
       return true
     end
+  end
+
+  def can_be_saved_by_teammate?(color)
+    king = self.pieces.find_by(type: "King", color: color)
+    game = king.game
+    game_id = game.id
+
+    pieces = king.game.find_in_game(color: color, active: true).to_a
+
+    threatening_pieces = threatening_pieces?(color)
+    threatening_pieces.each do |threatening_piece|
+      pieces.each do |piece|
+        if piece.valid_move?(threatening_piece.x, threatening_piece.y)
+          return true
+        end
+      end
+    end
+    return false
+
+    # ghost_piece = Piece.create(game_id: game_id)
+
+    # go through each cell on the gameboard
+    # (1..8).each do |row|
+    #   (1..8).each do |column|
+        # if having a piece from your own team in this cell changes the condition of king.checkmate? to false,
+        # ghost_piece.x = row
+        # ghost_piece.y = column
+        # if game.checkmate?(color) == false
+        #   #   cycle thru all valid pieces
+        #   pieces = game.find_in_game(color: color, active: true).to_a
+        #   pieces.each do |piece|
+        #     #   check each piece see if piece.valid_move?
+        #     if piece.valid_move?(row, column)
+        #       #   if TRUE, then return true
+        #       return true
+        #     end
+        #   end
+        #   return false
+        # end
+    #   end
+    # end
+    # pieces = self.game.find_in_game(color: opposing_color, active: true).to_a
+    # pieces.each do |piece|
+    #   if piece.valid_move?(req_x, req_y)
+    #     return true
+    #   end
+    # end
+    # return false
   end
 end
