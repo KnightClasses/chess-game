@@ -35,16 +35,6 @@ $(document).ready(function () {
         console.log(type);
         console.log(color);
 
-        if ( ( y == 1 || y == 8 ) && ( type == "Pawn" ) ) {
-          var chessPieces = ['Queen', 'Bishop', 'Knight', 'Pawn', 'Rook']
-          $.each(chessPieces, function(i, val) {
-            console.log(val);
-
-            var button='<button type="button" class="btn btn-primary">'+ this +'</button>';
-            $("#pawnPromote").append(button);
-          });
-        };
-
         $.ajax({
           type: 'PATCH',
           url: ui.draggable.data('update-url'),
@@ -53,6 +43,13 @@ $(document).ready(function () {
             piece: piece
           },
           success: function(){
+            if ( ( y == 1 || y == 8 ) && ( type == "Pawn" ) ) {
+              var chessPieces = ['Queen', 'Bishop', 'Knight', 'Pawn', 'Rook']
+              $.each(chessPieces, function(i, val) {
+                var button='<button type="button" class="btn btn-primary">'+ this +'</button>';
+                $("#pawnPromote").append(button);
+              });
+            };
             location.reload(true);
             $(".alert alert-info").html("<%= flash[:notice] %>");
           },
