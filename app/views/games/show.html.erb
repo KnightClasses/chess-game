@@ -56,7 +56,7 @@
       <% end %>
     </div>
     <div>
-      <% if @game.pieces.where("type = 'King' AND color = 1").take.can_castle?(7, 1) || @game.pieces.where("type = 'King' AND color = 1").take.can_castle?(3, 1) || @game.pieces.where("type = 'King' AND color = 1").take.can_castle?(7, 8) || @game.pieces.where("type = 'King' AND color = 1").take.can_castle?(3, 8) %>
+      <% if @game.pieces.where("type = 'King' AND color = 1").take.can_castle?(7, 8) || @game.pieces.where("type = 'King' AND color = 1").take.can_castle?(3, 8) %>
         <h3>Black can castle</h3>
       <% end %>
     </div>
@@ -83,7 +83,7 @@
       <% end %>
     </div>
     <div>
-      <% if @game.pieces.where("type = 'King' AND color = 0").take.can_castle?(7, 1) || @game.pieces.where("type = 'King' AND color = 0").take.can_castle?(3, 1) || @game.pieces.where("type = 'King' AND color = 0").take.can_castle?(7, 8) || @game.pieces.where("type = 'King' AND color = 0").take.can_castle?(3, 8) %>
+      <% if @game.pieces.where("type = 'King' AND color = 0").take.can_castle?(7, 1) || @game.pieces.where("type = 'King' AND color = 0").take.can_castle?(3, 1) %>
         <h3>White can castle</h3>
       <% end %>
     </div>
@@ -98,6 +98,7 @@
     <div class="btn btn-primary">
       <%= link_to "White: Forfeit Game", active_game_path(@game, user_id: @game.white_player_id), method: :patch %>
     </div>
+    <br />
+    <h3><%= @game.player_turn_color.capitalize %> to move</h3>
   </div>
-
 </div>

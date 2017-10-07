@@ -6,7 +6,8 @@ RSpec.describe PiecesController, type: :controller do
       user = FactoryGirl.create(:user)
       sign_in user
       game = FactoryGirl.create(:game)
-      piece = Piece.find_by(x: 1, y: 2)
+      #piece = Piece.find_by(x: 1, y: 2)
+      piece = game.find_one_in_game(x:1,y:2,type:"Pawn") 
       req_x = piece.x
       req_y = piece.y + 1
       patch :update, params: { game_id: game.id, id: piece.id, piece: { x: req_x, y: req_y } }
@@ -28,6 +29,15 @@ RSpec.describe PiecesController, type: :controller do
 
       expect(king.x).to eq(4)
       expect(king.y).to eq(1)
+    end
+    it "should do nothing if the moving piece is not the player_turn's piece" do
+      game = FactoryGirl.create(:game)
+      pawn = game.find_one_in_game(type:"Knight",color:"Black",x:2,y:8)
+      patch :update, params: { game_id: game.id, id: pawn.id, piece: {x:1,y:6} }
+      pawn.reload
+
+      expect(pawn.x).to eq(2)
+      expect(pawn.y).to eq(8)
     end
   end
 end

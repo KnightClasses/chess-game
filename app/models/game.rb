@@ -2,7 +2,7 @@ class Game < ApplicationRecord
   belongs_to :user, :foreign_key => "white_player_id"
   has_many :pieces
   scope :available, -> { where(black_player_id: nil) }
-  after_create :populate_game!
+  after_create :populate_game!, :initial_player_turn
 
   def populate_game!
     1.upto(8) do |x_pos|
@@ -37,7 +37,12 @@ class Game < ApplicationRecord
 
   def clear_current_board
     Piece.where("game_id = ?",self.id).destroy_all
+<<<<<<< HEAD
   end
+=======
+  end
+
+>>>>>>> master
   def find_in_game(**args)
     return self.pieces.where(game_id: self.id) if args == {}
     if args[:type] != nil
@@ -81,35 +86,17 @@ class Game < ApplicationRecord
     return false
   end
 
-  def checkmate?(color)
-    @king = self.pieces.find_by(type: "King", color: color)
-
-    game = @king.game
-
-    if @king.check? ## if king is in check,
-      #iterate through all possible moves (9 possible moves in perimeter of king) for checkmate
-      x = @king.x
-      y = @king.y
-      left = @king.x - 1
-      right = @king.x + 1
-      bottom = @king.y - 1
-      top = @king.y + 1
-
-      (left..right).each do |row|
-        (bottom..top).each do |column|
-          # if moving to the spot is valid,
-
-          if @king.is_valid?(row, column) && !@king.off_board?(row, column)
-            # and if moving to any of the spots results in NOT being in check,
-            if !@king.check?(row, column)
-              return false
-            end
-          end
-        end
-      end
-      # if the loop gets here without returning false, it means all the possible moves result in checkmate
-      return true
-    end
+  def initial_player_turn
+    self.update(player_turn: self.white_player_id)
   end
 
+  def change_player_turn
+    other_player = self.player_turn == self.white_player_id ? self.black_player_id : self.white_player_id
+    self.update(player_turn: other_player)
+  end
+
+  def player_turn_color
+    white = self.white_player_id
+    self.player_turn == white ? "white" : "black"
+  end
 end
