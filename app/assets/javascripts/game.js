@@ -57,6 +57,16 @@ $(document).ready(function () {
                 $("#pawnPromote").append(button);
               });
               $( "#Queen" ).click(function() {
+                $.ajax({
+                  type: 'PATCH',
+                  url: ui.draggable.data('update-url') + "/promote_pawn",
+                  dataType: 'json',
+                  data: {
+                    piece: {
+                      type: "Queen"
+                    }
+                  }
+                });
                 alert( "Handler for .click() called." );
                 dfd.resolve();
               });

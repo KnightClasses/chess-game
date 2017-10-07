@@ -4,7 +4,7 @@ Rails.application.routes.draw do
   root 'static_pages#index'
   resources :games, only: [:new, :show, :create, :index, :update] do
     resources :pieces, only: [:show, :update]
-    patch '/games/:game_id/pieces/:id/promote_pawn', to: 'pieces#promote_pawn'
+    patch '/pieces/:id/promote_pawn', to: 'pieces#promote_pawn'
   end
   resources :games do
     patch :active, on: :member
