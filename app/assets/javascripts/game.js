@@ -51,10 +51,14 @@ $(document).ready(function () {
               });
               $( "#Queen" ).click(function() {
                 alert( "Handler for .click() called." );
+                location.reload(true);
+                $(".alert alert-info").html("<%= flash[:notice] %>");
               });
+            }
+            else {
+              location.reload(true);
+              $(".alert alert-info").html("<%= flash[:notice] %>");
             };
-            location.reload(true);
-            $(".alert alert-info").html("<%= flash[:notice] %>");
           },
         });
       }
