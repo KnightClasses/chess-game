@@ -67,4 +67,29 @@ RSpec.describe Game, type: :model do
       expect(white_rook).to eq(Piece.where("game_id = ? AND type = 'Rook' AND color = 0 AND x = 1 AND y = 1",game.id).take)
     end
   end
+
+  describe "game#initial_player_turn" do
+    it "should initialize the player turn"do
+      game = FactoryGirl.create(:game)
+
+      expect(game.user.id).to eq(game.player_turn)
+    end
+  end
+  describe "game#change_player_turn" do
+    it "should change the active player" do
+      game = FactoryGirl.create(:game)
+      user = FactoryGirl.create(:user)
+      game.update_attributes(black_player_id: user.id)
+      game.change_player_turn
+
+      expect(game.player_turn).to eq(user.id)
+    end
+  end
+  describe "game#player_turn_color" do
+    it "should give the color of the player whose turn it currently is" do
+      game = FactoryGirl.create(:game)
+
+      expect(game.player_turn_color).to eq("white")
+    end
+  end
 end
