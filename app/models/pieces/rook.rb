@@ -24,34 +24,26 @@ class Rook < Piece
 
     (y+1..8).each do |digit|
       piece_in_current_cell_exists = !game.pieces.find_by("x = ? AND y = ?", x, digit).nil?
-      if digit > y
-        paths["north"] << [x, digit]
-      end
+      paths["north"] << [x, digit]
       break if piece_in_current_cell_exists
     end
 
     (x+1..8).each do |digit|
       byebug
       piece_in_current_cell_exists = !game.pieces.find_by("x = ? AND y = ?", digit, y).nil?
-      if digit > x
-        paths["east"] << [digit, y]
-      end
+      paths["east"] << [digit, y]
       break if piece_in_current_cell_exists
     end
 
     (y-1).downto(1) do |digit|
       piece_in_current_cell_exists = !game.pieces.find_by("x = ? AND y = ?", x, digit).nil?
-      if digit < y
-        paths["south"] << [x, digit]
-      end
+      paths["south"] << [x, digit]
       break if piece_in_current_cell_exists
     end
 
     (x-1).downto(1) do |digit|
       piece_in_current_cell_exists = !game.pieces.find_by("x = ? AND y = ?", digit, y).nil?
-      if digit < x && self.game.pieces.find_by("x = ? AND y = ?", digit, y).nil?
-        paths["west"] << [digit, y]
-      end
+      paths["west"] << [digit, y]
       break if piece_in_current_cell_exists
     end
 
