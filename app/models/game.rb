@@ -183,8 +183,10 @@ class Game < ApplicationRecord
     #
     # rook = self.pieces.find_by(type: "Rook", color: opposing_color)
     # bishop = self.pieces.find_by(type: "Bishop", color: opposing_color)
+    # queen = self.pieces.find_by(type: "Queen", color: opposing_color)
     #
-    # return bishop.capture_path
+    #
+    # return queen.capture_path
   end
 
 end

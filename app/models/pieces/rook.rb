@@ -29,7 +29,6 @@ class Rook < Piece
     end
 
     (x+1..8).each do |digit|
-      byebug
       piece_in_current_cell_exists = !game.pieces.find_by("x = ? AND y = ?", digit, y).nil?
       paths["east"] << [digit, y]
       break if piece_in_current_cell_exists
