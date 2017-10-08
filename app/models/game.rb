@@ -100,11 +100,13 @@ class Game < ApplicationRecord
     king = self.pieces.find_by(type: "King", color: color)
 
     if king.check?
-      if king_can_move_and_prevent_checkmate?(color) ||
-        (threatening_piece_may_be_captured_by_teammate?(color) && threatening_pieces?(color).count == 1 && player_turn_color == color)
-        return false
-      end
-      return true
+      return true if threatening_piece_may_be_blocked_by_teammate?(color)
+
+      # if king_can_move_and_prevent_checkmate?(color) ||
+      #   (threatening_piece_may_be_captured_by_teammate?(color) && threatening_pieces?(color).count == 1 && player_turn_color == color)
+      #   return false
+      # end
+      # return true
     end
   end
 
@@ -169,6 +171,14 @@ class Game < ApplicationRecord
   end
 
   def threatening_piece_may_be_blocked_by_teammate?(color)
+    if color == 'white'
+      opposing_color = 'black'
+    else
+      opposing_color = 'white'
+    end
 
+    rook = self.pieces.find_by(type: "Rook", color: opposing_color)
+    return rook.capture_path
   end
+
 end
