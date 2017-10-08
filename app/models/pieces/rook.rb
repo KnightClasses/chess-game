@@ -13,6 +13,7 @@ class Rook < Piece
   def capture_path
     x = self.x
     y = self.y
+    game = self.game
 
     paths = {
       "north" => [],
@@ -21,20 +22,39 @@ class Rook < Piece
       "west" => []
     }
 
-    (1..8).each do |digit|
-
-      if digit < y
-        paths["south"] << [x, digit]
-      elsif digit > y
+    (y+1..8).each do |digit|
+      piece_in_current_cell_exists = !game.pieces.find_by("x = ? AND y = ?", x, digit).nil?
+      if digit > y
         paths["north"] << [x, digit]
       end
+      break if piece_in_current_cell_exists
+    end
 
-      if digit < x
-        paths["west"] << [digit, y]
-      elsif digit > x
+    (x+1..8).each do |digit|
+      byebug
+      piece_in_current_cell_exists = !game.pieces.find_by("x = ? AND y = ?", digit, y).nil?
+      if digit > x
         paths["east"] << [digit, y]
       end
+      break if piece_in_current_cell_exists
     end
+
+    (y-1).downto(1) do |digit|
+      piece_in_current_cell_exists = !game.pieces.find_by("x = ? AND y = ?", x, digit).nil?
+      if digit < y
+        paths["south"] << [x, digit]
+      end
+      break if piece_in_current_cell_exists
+    end
+
+    (x-1).downto(1) do |digit|
+      piece_in_current_cell_exists = !game.pieces.find_by("x = ? AND y = ?", digit, y).nil?
+      if digit < x && self.game.pieces.find_by("x = ? AND y = ?", digit, y).nil?
+        paths["west"] << [digit, y]
+      end
+      break if piece_in_current_cell_exists
+    end
+
     paths
   end
 end
