@@ -101,13 +101,13 @@ class Game < ApplicationRecord
 
     if king.check?
 
-      # return true if threatening_piece_may_be_blocked_by_teammate?(color)  ## please ignore: in progress for capture_path logic
+      return true if threatening_piece_may_be_blocked_by_teammate?(color)  ## please ignore: in progress for capture_path logic
 
-      if king_can_move_and_prevent_checkmate?(color) ||
-        (threatening_piece_may_be_captured_by_teammate?(color) && threatening_pieces?(color).count == 1 && player_turn_color == color)
-        return false
-      end
-      return true
+      # if king_can_move_and_prevent_checkmate?(color) ||
+      #   (threatening_piece_may_be_captured_by_teammate?(color) && threatening_pieces?(color).count == 1 && player_turn_color == color)
+      #   return false
+      # end
+      # return true
     end
   end
 
@@ -172,21 +172,36 @@ class Game < ApplicationRecord
   end
 
   def threatening_piece_may_be_blocked_by_teammate?(color)
+    threatening_pieces = threatening_pieces?(color)
+    king = self.pieces.find_by(type: "King", color: color)
+    teammate_pieces = self.pieces.where(color: color, active: true).where.not(type: "King").to_a
 
-    ##### in progress #####
+    # if there is more than 1 threatening piece, it doesn't matter if you can block one of them
+    # because the other one(s) can capture the king on the next move
+    if threatening_pieces.length == 1
+      threatening_piece = threatening_pieces[0]
 
-    # if color == 'white'
-    #   opposing_color = 'black'
-    # else
-    #   opposing_color = 'white'
-    # end
-    #
-    # rook = self.pieces.find_by(type: "Rook", color: opposing_color)
-    # bishop = self.pieces.find_by(type: "Bishop", color: opposing_color)
-    # queen = self.pieces.find_by(type: "Queen", color: opposing_color)
-    #
-    #
-    # return queen.capture_path
+      # check each capture path for this threatening piece
+      threatening_piece.capture_path.values.each do |path|
+
+        # find which path the king is on
+        king_is_on_this_path = path if path.include?([king.x, king.y])
+
+        # go through each of pieces on your own team
+        teammate_pieces.each do |teammate_piece|
+
+          # go through each of the cells between the threatening piece and the king
+          king_is_on_this_path.each do |cell|
+            byebug
+
+            # if a teammate piece may move to any of the cells along this path, the threat CAN be BLOCKED
+            return true if teammate_piece.valid_move?(cell[0], cell[1])
+          end
+        end
+
+        # the threat can not be blocked
+        return false
+      end
+    end
   end
-
 end

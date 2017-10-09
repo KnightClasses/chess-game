@@ -113,7 +113,7 @@ class Queen < Piece
         break if piece_in_current_cell_exists
       end
     end
-    
+
     paths
   end
 end
