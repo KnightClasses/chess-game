@@ -100,14 +100,13 @@ class Game < ApplicationRecord
     king = self.pieces.find_by(type: "King", color: color)
 
     if king.check?
-
-      return true if threatening_piece_may_be_blocked_by_teammate?(color)  ## please ignore: in progress for capture_path logic
-
-      # if king_can_move_and_prevent_checkmate?(color) ||
-      #   (threatening_piece_may_be_captured_by_teammate?(color) && threatening_pieces?(color).count == 1 && player_turn_color == color)
-      #   return false
-      # end
-      # return true
+      return false if (
+        player_turn_color == color &&
+        threatening_pieces?(color).count == 1 &&
+        (king_can_move_and_prevent_checkmate?(color) ||
+        threatening_piece_may_be_captured_by_teammate?(color) ||
+        threatening_piece_may_be_blocked_by_teammate?(color) ) )
+      return true
     end
   end
 
