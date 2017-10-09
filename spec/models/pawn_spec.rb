@@ -30,9 +30,12 @@ RSpec.describe Pawn, type: :model do
 
     it "should successfully detect if a move is valid for diagonal captures" do 
       game = FactoryGirl.create(:game)
-      pawn1 = FactoryGirl.create(:piece, type: Pawn, color: 0, x:3, y:2, game_id: game.id)
-      pawn2 = FactoryGirl.create(:piece, type: Pawn, color: 1, x:4, y:3, game_id: game.id)
-      pawn3 = FactoryGirl.create(:piece, type: Pawn, color: 1, x:2, y:3, game_id: game.id)
+      FactoryGirl.create(:piece, type: Pawn, color: "white", x:3, y:2, game_id: game.id)
+      FactoryGirl.create(:piece, type: Pawn, color: "black", x:4, y:3, game_id: game.id)
+      FactoryGirl.create(:piece, type: Pawn, color: "black", x:2, y:3, game_id: game.id)
+      pawn1 = Piece.find_by("x = 3 AND y = 2 AND game_id = ? AND type = 'Pawn'", game.id)
+      pawn2 = Piece.find_by("x = 4 AND y = 3 AND game_id = ? AND type = 'Pawn'", game.id)
+      pawn3 = Piece.find_by("x = 2 AND y = 3 AND game_id = ? AND type = 'Pawn'", game.id)
 
       puts ""
       puts pawn1.inspect
