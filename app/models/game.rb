@@ -61,27 +61,6 @@ class Game < ApplicationRecord
     self.pieces.where(args,game_id:self.id).take
   end
 
-# determines if king with given color is in check
-  def in_check?(color)
-    # find the king with the given color
-    if color == 'white'
-      opposing_color = 'black'
-    else
-      opposing_color = 'white'
-    end
-
-    king = self.pieces.find_by(type: "King", color: color)
-
-    #iterate through the opposing pieces for check on the king
-    pieces = self.pieces.where(color: opposing_color, active: true).to_a
-    pieces.each do |piece|
-      if piece.valid_move?(king.x, king.y)
-        return true
-      end
-    end
-    return false
-  end
-
   def initial_player_turn
     self.update(player_turn: self.white_player_id)
   end
