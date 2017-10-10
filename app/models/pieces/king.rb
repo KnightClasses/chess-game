@@ -46,7 +46,7 @@ class King < Piece
     pieces = self.game.find_in_game(color: opposing_color, active: true).to_a
     pieces.each do |piece|
       if piece.valid_move?(req_x, req_y)
-        return true
+        return true unless piece.type == 'Pawn' && piece.x == req_x
       end
     end
     return false
