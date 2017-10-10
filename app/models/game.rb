@@ -191,7 +191,6 @@ class Game < ApplicationRecord
 
           # go through each of the cells between the threatening piece and the king
           king_is_on_this_path.each do |cell|
-            byebug
 
             # if a teammate piece may move to any of the cells along this path, the threat CAN be BLOCKED
             return true if teammate_piece.valid_move?(cell[0], cell[1])
