@@ -12,7 +12,7 @@ class Pawn < Piece
         return true if req_x == self.x + 1 && req_y == self.y + 1 && (game.pieces.find_by(x: self.x + 1, y: self.y + 1).present?)
         return true if req_x == self.x - 1 && req_y == self.y + 1 && (game.pieces.find_by(x: self.x - 1, y: self.y + 1).present?)
       else
-        return true if (req_x == self.x && req_y == self.y + 1) && !(game.pieces.find_by(x: self.x + 1, y: self.y + 1).present?)
+        return true if (req_x == self.x && req_y == self.y + 1) && !(game.pieces.find_by(x: self.x, y: self.y + 1).present?)
         return true if req_x == self.x + 1 && req_y == self.y + 1 && (game.pieces.find_by(x: self.x + 1, y: self.y + 1).present?)
         return true if req_x == self.x - 1 && req_y == self.y + 1 && (game.pieces.find_by(x: self.x - 1, y: self.y + 1).present?)
       end
