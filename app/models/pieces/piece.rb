@@ -92,7 +92,7 @@ class Piece < ApplicationRecord
         self.update(x: req_x, y: req_y)
       end
     elsif self.type == "King" && (req_x - self.x).abs == 2
-      self.castle!(req_x, req_y) 
+      self.castle!(req_x, req_y)
     else
       # if the clicked cell is empty then move the 1st piece there
       self.update(x: req_x, y: req_y)
@@ -105,10 +105,15 @@ class Piece < ApplicationRecord
     return self.color == blocking_piece.color if blocking_piece
   end
 
+  def off_board?(req_x, req_y)
+    return true if req_x < 1 || req_x > 8 || req_y < 1 || req_y > 8
+  end
+
   def valid_move?(req_x, req_y)
     return false if is_obstructed?(req_x, req_y)
     return false unless is_valid?(req_x, req_y)
     return false if same_team?(req_x, req_y)
+    return false if self.off_board?(req_x, req_y)
     return true
   end
 end

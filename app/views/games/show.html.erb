@@ -66,6 +66,9 @@
         <% if @game.in_check?('black') %>
           <h3>Black king is in check</h3>
         <% end %>
+        <% if @game.checkmate?('black') %>
+        <h3>White says to black king: "Checkmate, mate!"</h3>
+        <% end %>
       </div>
     </div>
     <div class="btn btn-primary">
@@ -74,7 +77,7 @@
 
     <br />
     <br />
-    
+
     <div class="captured-pieces">
       <h5>White Player's Captures</h5><br />
       <% captured_pieces = @game.pieces.where(color: "black", active: false) %>
@@ -91,6 +94,9 @@
       <div>
         <% if @game.in_check?('white') %>
           <h3>White king is in check</h3>
+        <% end %>
+        <% if @game.checkmate?('white') %>
+          <h3>Black says to white king: "Checkmate, mate!"</h3>
         <% end %>
       </div>
     </div>
