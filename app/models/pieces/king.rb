@@ -51,11 +51,11 @@ class King < Piece
       if options[:king_capture_moves_into_check] == true
         return true if !piece.is_obstructed?(req_x, req_y) && piece.is_valid?(req_x, req_y) && !piece.off_board?(req_x, req_y) && piece.type != 'Pawn'
       end
-      if piece.type == 'Pawn' && piece.color == "white"
+      if piece.type == 'Pawn' && piece.color == "white" && !piece.off_board?(req_x, req_y)
         return true if req_x == piece.x + 1 && req_y == piece.y + 1
         return true if req_x == piece.x - 1 && req_y == piece.y + 1
       end 
-      if piece.type == 'Pawn' && piece.color == "black"
+      if piece.type == 'Pawn' && piece.color == "black" && !piece.off_board?(req_x, req_y)
         return true if req_x == piece.x + 1 && req_y == piece.y - 1
         return true if req_x == piece.x - 1 && req_y == piece.y - 1
       end
