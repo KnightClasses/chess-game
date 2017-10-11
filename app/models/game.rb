@@ -87,7 +87,7 @@ class Game < ApplicationRecord
         threatening_piece_may_be_blocked_by_teammate?(color) ) )
       return true
     end
-    
+
     return false
   end
 
@@ -182,5 +182,8 @@ class Game < ApplicationRecord
         return false
       end
     end
+
+    # there are more than 1 threatening pieces
+    return false
   end
 end
