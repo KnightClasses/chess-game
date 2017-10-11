@@ -105,7 +105,7 @@ class Game < ApplicationRecord
         # if moving to the spot is valid,
         if king.valid_move?(row, column)
           # and if moving to any of the spots results in NOT being in check,
-          if !king.check?(row, column, {king_capture_moves_into_check: true})
+          if !king.check?(row, column)
             return true ## king can safely move there
           end
         end
@@ -165,7 +165,11 @@ class Game < ApplicationRecord
       threatening_piece.capture_path.values.each do |path|
 
         # find which path the king is on
-        king_is_on_this_path = path if path.include?([king.x, king.y])
+        if path.include?([king.x, king.y])
+          king_is_on_this_path = path
+        else
+          next
+        end
 
         # go through each of pieces on your own team
         teammate_pieces.each do |teammate_piece|

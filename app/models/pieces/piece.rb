@@ -111,7 +111,7 @@ class Piece < ApplicationRecord
 
   def valid_move?(req_x, req_y)
     return false if is_obstructed?(req_x, req_y)
-    return false unless is_valid?(req_x, req_y)
+    return false if !is_valid?(req_x, req_y)
     return false if same_team?(req_x, req_y)
     return false if self.off_board?(req_x, req_y)
     return true
