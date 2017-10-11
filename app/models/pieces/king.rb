@@ -39,14 +39,25 @@ class King < Piece
     end
   end
 
-  def check?(req_x = self.x,req_y = self.y)
+  def check?(req_x = self.x,req_y = self.y, options={})
     opposing_color = self.color == "white" ? "black" : "white"
 
     #iterate through the opposing pieces for check on the king
     pieces = self.game.find_in_game(color: opposing_color, active: true).to_a
     pieces.each do |piece|
       if piece.valid_move?(req_x, req_y)
-        return true unless piece.type == 'Pawn' && piece.x == req_x
+        return true unless piece.type == 'Pawn' || options[:king_capture_moves_into_check] == true
+      end
+      if options[:king_capture_moves_into_check] == true
+        return true if !piece.is_obstructed?(req_x, req_y) && piece.is_valid?(req_x, req_y) && !piece.off_board?(req_x, req_y) && piece.type != 'Pawn'
+      end
+      if piece.type == 'Pawn' && piece.color == "white"
+        return true if req_x == piece.x + 1 && req_y == piece.y + 1
+        return true if req_x == piece.x - 1 && req_y == piece.y + 1
+      end 
+      if piece.type == 'Pawn' && piece.color == "black"
+        return true if req_x == piece.x + 1 && req_y == piece.y - 1
+        return true if req_x == piece.x - 1 && req_y == piece.y - 1
       end
     end
     return false

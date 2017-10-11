@@ -103,7 +103,7 @@ class Game < ApplicationRecord
         # if moving to the spot is valid,
         if king.valid_move?(row, column)
           # and if moving to any of the spots results in NOT being in check,
-          if !king.check?(row, column)
+          if !king.check?(row, column, {:king_capture_moves_into_check: true})
             return true ## king can safely move there
           end
         end
