@@ -1,9 +1,4 @@
 class King < Piece
-  #method for this to use
-  def check
-    return "This is the king"
-  end
-
 
   def is_valid?(req_x, req_y)
     return false if self.check?(req_x,req_y)
