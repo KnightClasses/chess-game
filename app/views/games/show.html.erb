@@ -56,19 +56,18 @@
 
     <div class="captured-pieces">
       <h5>Black Player's Captures</h5><br />
-      <% captured_pieces = @game.pieces.where(color: "white", active: false) %>
-      <% captured_pieces.each do |captured_piece| %>
+      <% @pieces_captured_by_black.each do |captured_piece| %>
         <%= image_tag("#{captured_piece.color.downcase}_#{captured_piece.type.downcase}.png", height: '45', width: '45') %>
       <% end %>
     </div>
     <div class="black-messages">
       <div class="message">
-        <% if @game.pieces.where("type = 'King' AND color = 1").take.can_castle?(7, 8) || @game.pieces.where("type = 'King' AND color = 1").take.can_castle?(3, 8) %>
+        <% if @black_king.can_castle?(7, 8) || @black_king.can_castle?(3, 8) %>
           <h3>Black can castle</h3>
         <% end %>
       </div>
       <div class="message">
-        <% if @game.pieces.find_by("type = 'King' AND color = 1").check? %>
+        <% if @black_king.check? %>
           <h3>Black king is in check</h3>
         <% end %>
       </div>
@@ -87,19 +86,18 @@
 
     <div class="captured-pieces">
       <h5>White Player's Captures</h5><br />
-      <% captured_pieces = @game.pieces.where(color: "black", active: false) %>
-      <% captured_pieces.each do |captured_piece| %>
+      <% @pieces_captured_by_white.each do |captured_piece| %>
         <%= image_tag("#{captured_piece.color.downcase}_#{captured_piece.type.downcase}.png", height: '45', width: '45') %>
       <% end %>
     </div>
     <div class="white-messages">
       <div class="message">
-        <% if @game.pieces.where("type = 'King' AND color = 0").take.can_castle?(7, 1) || @game.pieces.where("type = 'King' AND color = 0").take.can_castle?(3, 1) %>
+        <% if @white_king.can_castle?(7, 1) || @white_king.can_castle?(3, 1) %>
           <h3>White can castle</h3>
         <% end %>
       </div>
       <div class="message">
-        <% if @game.pieces.find_by("type = 'King' AND color = 0").check? %>
+        <% if @white_king.check? %>
           <h3>White king is in check</h3>
         <% end %>
       </div>
