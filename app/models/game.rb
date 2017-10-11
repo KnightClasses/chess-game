@@ -87,6 +87,8 @@ class Game < ApplicationRecord
         threatening_piece_may_be_blocked_by_teammate?(color) ) )
       return true
     end
+
+    return false
   end
 
   def king_can_move_and_prevent_checkmate?(color)
@@ -103,7 +105,7 @@ class Game < ApplicationRecord
         # if moving to the spot is valid,
         if king.valid_move?(row, column)
           # and if moving to any of the spots results in NOT being in check,
-          if !king.check?(row, column, {king_capture_moves_into_check: true})
+          if !king.check?(row, column)
             return true ## king can safely move there
           end
         end

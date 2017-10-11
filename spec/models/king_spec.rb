@@ -142,4 +142,42 @@ RSpec.describe King, type: :model do
       expect(king.check?(7,1)).to eq(false)
     end
   end
+  describe "king#checkmate?" do
+    it "should successfully detect if a King's position is checkmated" do
+      game = FactoryGirl.create(:game)
+      game.clear_current_board
+      FactoryGirl.create(:piece,type: King,active:true,color:1,x:7,y:1,game_id:game.id)
+      FactoryGirl.create(:piece,type:Queen,active:true,color:0,x:3,y:1,game_id:game.id)
+      FactoryGirl.create(:piece,type:King,active:true,color:0,x:7,y:3,game_id:game.id)
+      FactoryGirl.create(:piece,type:Rook,active:true,color:0,x:1,y:8,game_id:game.id)
+      king = game.pieces.find_by(x:7,y:1)
+
+      expect(king.game.checkmate?(1)).to eq(true)
+    end
+    it "should successfully detect if a King's position is NOT checkmated" do
+      game = FactoryGirl.create(:game)
+      game.clear_current_board
+      FactoryGirl.create(:piece,type: King,active:true,color:1,x:7,y:1,game_id:game.id)
+      FactoryGirl.create(:piece,type:Queen,active:true,color:0,x:3,y:3,game_id:game.id)
+      FactoryGirl.create(:piece,type:King,active:true,color:0,x:7,y:3,game_id:game.id)
+      FactoryGirl.create(:piece,type:Rook,active:true,color:0,x:1,y:8,game_id:game.id)
+      king = game.pieces.find_by(x:7,y:1)
+
+      expect(king.game.checkmate?(1)).to eq(false)
+    end
+    it "should successfully detect if a King's position is checkmated" do
+      game = FactoryGirl.create(:game)
+      game.clear_current_board
+      FactoryGirl.create(:piece,type: Rook,active:true,color:0,x:1,y:8,game_id:game.id)
+      FactoryGirl.create(:piece,type: King,active:true,color:0,x:7,y:1,game_id:game.id)
+      FactoryGirl.create(:piece,type: King,active:true,color:1,x:7,y:8,game_id:game.id)
+      FactoryGirl.create(:piece,type:Pawn,active:true,color:1,x:6,y:7,game_id:game.id)
+      FactoryGirl.create(:piece,type:Pawn,active:true,color:1,x:7,y:7,game_id:game.id)
+      FactoryGirl.create(:piece,type:Pawn,active:true,color:1,x:8,y:7,game_id:game.id)
+      king = game.pieces.find_by(x:7,y:8)
+
+      expect(king.game.checkmate?(1)).to eq(true)
+    end
+  end
+
 end
