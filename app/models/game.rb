@@ -161,9 +161,13 @@ class Game < ApplicationRecord
 
       # check each capture path for this threatening piece
       threatening_piece.capture_path.values.each do |path|
-
+        
         # find which path the king is on
-        king_is_on_this_path = path if path.include?([king.x, king.y])
+        if path.include?([king.x, king.y])
+          king_is_on_this_path = path
+        else
+          next
+        end
 
         # go through each of pieces on your own team
         teammate_pieces.each do |teammate_piece|
