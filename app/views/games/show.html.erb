@@ -1,8 +1,12 @@
-<h1 class="game-name"><%= @game.name %></h1>
-<div class="btn-group" id="pawnPromote"></div>
-
 <div class="row">
   <div class="board-container col-9">
+
+    <h1 class="game-name"><%= @game.name %></h1>
+    <div class="turn-indicator">
+      <h2><span class="badge badge-info"><%= @game.player_turn_color.capitalize %> to move</span></h2>
+    </div>
+    <div class="btn-group" id="pawnPromote"></div>
+
     <div class='board'>
       <%# establishes the vertical dimension of the board %>
       <% 8.downto(1) do |y| %>
@@ -46,71 +50,68 @@
         </div>
       <% end %>
     </div>
-  </div>
-
-  <div class="player-console col-3">
-
-    <div class="message">
-      <h2><%= @game.player_turn_color.capitalize %> to move</h2>
     </div>
 
-    <div class="captured-pieces">
-      <h5>Black Player's Captures</h5><br />
-      <% @pieces_captured_by_black.each do |captured_piece| %>
-        <%= image_tag("#{captured_piece.color.downcase}_#{captured_piece.type.downcase}.png", height: '45', width: '45') %>
-      <% end %>
-    </div>
-    <div class="black-messages">
-      <div class="message">
-        <% if @black_king.can_castle?(7, 8) || @black_king.can_castle?(3, 8) %>
-          <h3>Black can castle</h3>
+    <div class="right-console col-3">
+    <div class="player-console">
+      <h4>Black Player's Console</h4>
+      <div class="captured-pieces">
+        <% @pieces_captured_by_black.reverse.each do |captured_piece| %>
+          <%= image_tag("#{captured_piece.color.downcase}_#{captured_piece.type.downcase}.png", height: '45', width: '45') %>
         <% end %>
       </div>
-      <div class="message">
-        <% if @black_king.check? %>
-          <h3>Black king is in check</h3>
-        <% end %>
+      <div class="black-messages">
+        <div>
+          <% if @black_king.can_castle?(7, 8) || @black_king.can_castle?(3, 8) %>
+            <h4><span class="badge badge-success">Black can castle</span></h4>
+          <% end %>
+        </div>
+        <div>
+          <% if @black_king.check? %>
+            <h4><span class="badge badge-warning">Black king is in check</span></h4>
+          <% end %>
+        </div>
+        <div>
+          <% if @game.checkmate?('black') %>
+          <h4><span class="badge badge-danger">White says to black king: <br />"Checkmate, mate!"</span></h4>
+          <% end %>
+        </div>
       </div>
-      <div class="message">
-        <% if @game.checkmate?('black') %>
-          <h3>White says to black king: "Checkmate, mate!"</h3>
-        <% end %>
+      <div class="btn btn-secondary">
+        <%= link_to "Black: Forfeit Game", active_game_path(@game, user_id: @game.black_player_id), method: :patch %>
       </div>
-    </div>
-    <div class="btn btn-primary">
-      <%= link_to "Black: Forfeit Game", active_game_path(@game, user_id: @game.black_player_id), method: :patch %>
     </div>
 
-    <br />
-    <br />
-
-    <div class="captured-pieces">
-      <h5>White Player's Captures</h5><br />
-      <% @pieces_captured_by_white.each do |captured_piece| %>
-        <%= image_tag("#{captured_piece.color.downcase}_#{captured_piece.type.downcase}.png", height: '45', width: '45') %>
-      <% end %>
-    </div>
-    <div class="white-messages">
-      <div class="message">
-        <% if @white_king.can_castle?(7, 1) || @white_king.can_castle?(3, 1) %>
-          <h3>White can castle</h3>
+    <div class="player-console">
+      <h4>White Player's Console</h4>
+      <div class="captured-pieces">
+        <% @pieces_captured_by_white.reverse.each do |captured_piece| %>
+          <%= image_tag("#{captured_piece.color.downcase}_#{captured_piece.type.downcase}.png", height: '45', width: '45') %>
         <% end %>
       </div>
-      <div class="message">
-        <% if @white_king.check? %>
-          <h3>White king is in check</h3>
-        <% end %>
+      <div class="white-messages">
+        <div>
+          <% if @white_king.can_castle?(7, 1) || @white_king.can_castle?(3, 1) %>
+            <h4><span class="badge badge-success">White can castle</span></h4>
+          <% end %>
+        </div>
+        <div>
+          <% if @white_king.check? %>
+            <h4><span class="badge badge-warning">White king is in check</span></h4>
+          <% end %>
+        </div>
+        <div>
+          <% if @game.checkmate?('white') %>
+            <h4><span class="badge badge-danger">Black says to white king: <br />"Checkmate, mate!"</span></h4>
+          <% end %>
+        </div>
       </div>
-      <div class="message">
-        <% if @game.checkmate?('white') %>
-          <h3>Black says to white king: "Checkmate, mate!"</h3>
-        <% end %>
+      <div class="btn btn-secondary">
+        <%= link_to "White: Forfeit Game", active_game_path(@game, user_id: @game.white_player_id), method: :patch %>
       </div>
+      <br />
     </div>
-    <div class="btn btn-primary">
-      <%= link_to "White: Forfeit Game", active_game_path(@game, user_id: @game.white_player_id), method: :patch %>
-    </div>
-    <br />
 
   </div>
+
 </div>
