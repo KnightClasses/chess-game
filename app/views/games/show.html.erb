@@ -63,7 +63,7 @@
         <% end %>
       </div>
       <div>
-        <% if @game.in_check?('black') %>
+        <% if @game.pieces.find_by("type = 'King' AND color = 1").check? %>
           <h3>Black king is in check</h3>
         <% end %>
         <% if @game.checkmate?('black') %>
@@ -92,7 +92,7 @@
         <% end %>
       </div>
       <div>
-        <% if @game.in_check?('white') %>
+        <% if @game.pieces.find_by("type = 'King' AND color = 0").check? %>
           <h3>White king is in check</h3>
         <% end %>
         <% if @game.checkmate?('white') %>
