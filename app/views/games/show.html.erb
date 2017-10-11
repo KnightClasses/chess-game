@@ -49,6 +49,11 @@
   </div>
 
   <div class="player-console col-3">
+
+    <div class="message">
+      <h2><%= @game.player_turn_color.capitalize %> to move</h2>
+    </div>
+
     <div class="captured-pieces">
       <h5>Black Player's Captures</h5><br />
       <% captured_pieces = @game.pieces.where(color: "white", active: false) %>
@@ -56,18 +61,20 @@
         <%= image_tag("#{captured_piece.color.downcase}_#{captured_piece.type.downcase}.png", height: '45', width: '45') %>
       <% end %>
     </div>
-    <div class="black messages">
-      <div>
+    <div class="black-messages">
+      <div class="message">
         <% if @game.pieces.where("type = 'King' AND color = 1").take.can_castle?(7, 8) || @game.pieces.where("type = 'King' AND color = 1").take.can_castle?(3, 8) %>
           <h3>Black can castle</h3>
         <% end %>
       </div>
-      <div>
+      <div class="message">
         <% if @game.pieces.find_by("type = 'King' AND color = 1").check? %>
           <h3>Black king is in check</h3>
         <% end %>
+      </div>
+      <div class="message">
         <% if @game.checkmate?('black') %>
-        <h3>White says to black king: "Checkmate, mate!"</h3>
+          <h3>White says to black king: "Checkmate, mate!"</h3>
         <% end %>
       </div>
     </div>
@@ -85,26 +92,27 @@
         <%= image_tag("#{captured_piece.color.downcase}_#{captured_piece.type.downcase}.png", height: '45', width: '45') %>
       <% end %>
     </div>
-    <div class="white messages">
-      <div>
+    <div class="white-messages">
+      <div class="message">
         <% if @game.pieces.where("type = 'King' AND color = 0").take.can_castle?(7, 1) || @game.pieces.where("type = 'King' AND color = 0").take.can_castle?(3, 1) %>
           <h3>White can castle</h3>
         <% end %>
       </div>
-      <div>
+      <div class="message">
         <% if @game.pieces.find_by("type = 'King' AND color = 0").check? %>
           <h3>White king is in check</h3>
         <% end %>
+      </div>
+      <div class="message">
         <% if @game.checkmate?('white') %>
           <h3>Black says to white king: "Checkmate, mate!"</h3>
         <% end %>
       </div>
     </div>
-
     <div class="btn btn-primary">
       <%= link_to "White: Forfeit Game", active_game_path(@game, user_id: @game.white_player_id), method: :patch %>
     </div>
     <br />
-    <h3><%= @game.player_turn_color.capitalize %> to move</h3>
+
   </div>
 </div>
