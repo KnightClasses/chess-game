@@ -40,16 +40,9 @@ class King < Piece
     #iterate through the opposing pieces for check on the king
     pieces = self.game.find_in_game(color: opposing_color, active: true).to_a
     pieces.each do |piece|
-      if !piece.is_obstructed?(req_x, req_y) && piece.is_valid?(req_x, req_y) && !piece.off_board?(req_x, req_y)
-        return true unless piece.type == 'Pawn'
-      end
-      if piece.type == 'Pawn' && piece.color == "white" && !piece.off_board?(req_x, req_y)
-        return true if req_x == piece.x + 1 && req_y == piece.y + 1
-        return true if req_x == piece.x - 1 && req_y == piece.y + 1
-      end
-      if piece.type == 'Pawn' && piece.color == "black" && !piece.off_board?(req_x, req_y)
-        return true if req_x == piece.x + 1 && req_y == piece.y - 1
-        return true if req_x == piece.x - 1 && req_y == piece.y - 1
+      if !piece.is_obstructed?(req_x, req_y) && piece.is_valid?(req_x, req_y)
+        return piece.valid_capture?(req_x, req_y) if piece.type == 'Pawn'
+        return true
       end
     end
     return false
@@ -60,9 +53,7 @@ class King < Piece
     game = self.game
     adjustments = game.threatening_pieces_directional_adjustment?(color)
     adjustments.each do |adjustment|
-      if [req_x, req_y] == [adjustment[0] + king.x, adjustment[1] + king.y]
-        return true
-      end
+      return true if [req_x, req_y] == [adjustment[0] + king.x, adjustment[1] + king.y]
     end
     return false
   end

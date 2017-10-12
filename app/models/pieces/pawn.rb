@@ -28,4 +28,14 @@ class Pawn < Piece
     end
     return false
   end
+
+  def valid_capture?(req_x, req_y)
+    if self.color == "white"
+      return true if req_x == self.x + 1 && req_y == self.y + 1
+      return true if req_x == self.x - 1 && req_y == self.y + 1
+    else
+      return true if req_x == self.x + 1 && req_y == self.y - 1
+      return true if req_x == self.x - 1 && req_y == self.y - 1
+    end
+  end
 end

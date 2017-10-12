@@ -99,11 +99,14 @@ class Game < ApplicationRecord
     right = king.x + 1
     bottom = king.y - 1
     top = king.y + 1
-    adjustments = game.threatening_pieces_directional_adjustment?(color)
 
     (left..right).each do |row|
       (bottom..top).each do |column|
-        return true if !king.off_board?(row, column) && !king.same_team?(row, column) && !king.check?(row, column) && !king.in_kings_shadow?(row, column)
+        return true if (
+          !king.off_board?(row, column) &&
+          !king.same_team?(row, column) &&
+          !king.check?(row, column) &&
+          !king.in_kings_shadow?(row, column) )
       end
     end
     return false ## no such safe spot exists for the king to move itself to
