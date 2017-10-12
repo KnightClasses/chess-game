@@ -165,19 +165,6 @@ RSpec.describe King, type: :model do
       FactoryGirl.create(:piece,type:Pawn,active:true,color:1,x:8,y:7,game_id:game.id)
       king = game.pieces.find_by(x:7,y:8)
       king.game.player_turn = "black"
-      puts king.inspect
-      puts king.game.inspect
-      puts king.game.king_can_move_and_prevent_checkmate?(1).inspect
-      puts king.game.king_can_move_and_prevent_checkmate?("black").inspect
-      puts game.player_turn_color.inspect
-      puts "black checkmate?"
-      puts king.game.checkmate?("black").inspect
-      puts "same team at 7, 6?"
-      puts king.same_team?(7, 6).inspect
-      puts "off board at 7, 6?"
-      puts king.off_board?(7, 6).inspect
-      puts "check at 7, 6?"
-      puts king.check?(7, 6).inspect
 
       expect(king.game.checkmate?("black")).to eq(true)
     end
@@ -192,12 +179,6 @@ RSpec.describe King, type: :model do
       FactoryGirl.create(:piece,type:Pawn,active:true,color:1,x:8,y:7,game_id:game.id)
       king = game.pieces.find_by(x:7,y:8)
       king.game.player_turn = "black"
-      puts king.inspect
-      puts king.game.inspect
-      puts king.game.king_can_move_and_prevent_checkmate?(1).inspect
-      puts king.game.king_can_move_and_prevent_checkmate?("black").inspect
-      puts game.player_turn_color.inspect
-      puts king.game.checkmate?("black").inspect
 
       expect(king.game.checkmate?("black")).to eq(false)
     end
@@ -210,12 +191,6 @@ RSpec.describe King, type: :model do
       FactoryGirl.create(:piece,type:King,active:true,color:1,x:4,y:8,game_id:game.id)
       king = game.pieces.find_by(x:4,y:8)
       king.game.player_turn = "black"
-      puts king.inspect
-      puts king.game.inspect
-      puts king.game.king_can_move_and_prevent_checkmate?(1).inspect
-      puts king.game.king_can_move_and_prevent_checkmate?("black").inspect
-      puts game.player_turn_color.inspect
-      puts king.game.checkmate?("black").inspect
 
       expect(king.game.checkmate?("black")).to eq(true)
     end
