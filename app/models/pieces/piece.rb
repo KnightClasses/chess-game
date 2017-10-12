@@ -70,9 +70,6 @@ class Piece < ApplicationRecord
 
     elsif self.type == "Knight"
       return false
-
-    else # invalid move
-      return "invalid move"
     end
 
     return false
