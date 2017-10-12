@@ -93,6 +93,7 @@ class Game < ApplicationRecord
 
   def king_can_move_and_prevent_checkmate?(color)
     king = self.pieces.find_by(type: "King", color: color)
+    game = king.game
     #iterate through all possible moves (8 possible moves in perimeter of king) for a safe spot (no checkmate)
     left = king.x - 1
     right = king.x + 1
@@ -133,7 +134,32 @@ class Game < ApplicationRecord
     return threatening_pieces
   end
 
+  def threatening_pieces_directional_adjustment?(color)
+    king = self.pieces.find_by(type: "King", color: color)
+    threatening_pieces = threatening_pieces?(color)
+    directional_adjustment = []
 
+    threatening_pieces.each do |threatening_piece|
+      if threatening_piece.x == king.x && threatening_piece.y > king.y ## threat is to the north of king
+          directional_adjustment << [0, 1]
+      elsif threatening_piece.x > king.x && threatening_piece.y == king.y ## threat is to the east of king
+        directional_adjustment << [1, 0]
+      elsif threatening_piece.x == king.x && threatening_piece.y < king.y ## threat is to the south of king
+        directional_adjustment << [0, -1]
+      elsif threatening_piece.x < king.x && threatening_piece.y == king.y ## threat is to the west of king
+        directional_adjustment << [-1, 0]
+      elsif threatening_piece.x > king.x && threatening_piece.y > king.y ## threat is to the northeast of king
+        directional_adjustment << [1, 1]
+      elsif threatening_piece.x > king.x && threatening_piece.y < king.y ## threat is to the southeast of king
+        directional_adjustment << [1, -1]
+      elsif threatening_piece.x < king.x && threatening_piece.y < king.y ## threat is to the southwest of king
+        directional_adjustment << [-1, -1]
+      elsif threatening_piece.x < king.x && threatening_piece.y > king.y ## threat is to the northwest of king
+        directional_adjustment << [-1, 1]
+      end
+    end
+    directional_adjustment
+  end
 
   def threatening_piece_may_be_captured_by_teammate?(color)
     king = self.pieces.find_by(type: "King", color: color)
