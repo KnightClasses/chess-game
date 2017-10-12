@@ -1,16 +1,6 @@
 require 'rails_helper'
 
 RSpec.describe Rook, type: :model do
-  describe "check method on rook should return" do
-    it "should tell us 'this is the rook'" do
-      FactoryGirl.create(:piece,type:Rook)
-      rook1 = Rook.last
-      expected = "This is the rook"
-
-      expect(rook1.check).to eq(expected)
-    end
-  end
-
   describe "Rook#is_valid? method" do 
     it "should successfully detect if a move is valid" do 
       FactoryGirl.create(:piece, type: Rook)

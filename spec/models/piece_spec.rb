@@ -40,11 +40,5 @@ RSpec.describe Piece, type: :model do
 
       expect(bishop1.is_obstructed?(5,5)).to eq(false)
     end
-
-    it "should successfully detect if a move is illegal (neither horizontal, vertical, nor diagonal)" do
-      pawn1 = FactoryGirl.create(:piece, type:Pawn) #x:3,y:3
-
-      expect(pawn1.is_obstructed?(2,5)).to eq("invalid move")
-    end
   end
 end
