@@ -46,10 +46,22 @@ class King < Piece
       if piece.type == 'Pawn' && piece.color == "white" && !piece.off_board?(req_x, req_y)
         return true if req_x == piece.x + 1 && req_y == piece.y + 1
         return true if req_x == piece.x - 1 && req_y == piece.y + 1
-      end 
+      end
       if piece.type == 'Pawn' && piece.color == "black" && !piece.off_board?(req_x, req_y)
         return true if req_x == piece.x + 1 && req_y == piece.y - 1
         return true if req_x == piece.x - 1 && req_y == piece.y - 1
+      end
+    end
+    return false
+  end
+
+  def in_kings_shadow?(req_x, req_y)
+    king = self
+    game = self.game
+    adjustments = game.threatening_pieces_directional_adjustment?(color)
+    adjustments.each do |adjustment|
+      if [req_x, req_y] == [adjustment[0] + king.x, adjustment[1] + king.y]
+        return true
       end
     end
     return false

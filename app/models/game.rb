@@ -103,20 +103,7 @@ class Game < ApplicationRecord
 
     (left..right).each do |row|
       (bottom..top).each do |column|
-        # if moving to the spot is valid,
-         if king.is_valid?(row, column) && !king.same_team?(row, column) && !king.off_board?(row, column)
-          # and if moving to any of the spots results in NOT being in check,
-          # check that the spot is not one cell beyond the king on the capture path of the threat
-          if !king.check?(row, column)
-            adjustments.each do |adjustment|
-              # if it is, then moving to that spot would still result in checkmate
-              if [row, column] == [adjustment[0] + king.x, adjustment[1] + king.y]
-                return false
-              end
-            end
-            return true
-          end
-        end
+        return true if !king.off_board?(row, column) && !king.same_team?(row, column) && !king.check?(row, column) && !king.in_kings_shadow?(row, column)
       end
     end
     return false ## no such safe spot exists for the king to move itself to
