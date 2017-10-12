@@ -109,10 +109,14 @@ class Piece < ApplicationRecord
     return true if req_x < 1 || req_x > 8 || req_y < 1 || req_y > 8
   end
 
+  def move_results_in_check?(req_x, req_y)
+    return true if game.pieces.find_by(type: "King", color: color)
+  end
+
   def valid_move?(req_x, req_y)
-    return false if is_obstructed?(req_x, req_y)
-    return false if !is_valid?(req_x, req_y)
-    return false if same_team?(req_x, req_y)
+    return false if self.is_obstructed?(req_x, req_y)
+    return false if !self.is_valid?(req_x, req_y)
+    return false if self.same_team?(req_x, req_y)
     return false if self.off_board?(req_x, req_y)
     return true
   end

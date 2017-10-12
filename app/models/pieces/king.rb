@@ -6,7 +6,7 @@ class King < Piece
 
 
   def is_valid?(req_x, req_y)
-    return false if self.check?(req_x,req_y)
+#   return false if self.check?(req_x,req_y)
     return true if (req_x - self.x).abs == 2 && self.can_castle?(req_x, req_y)
     return true if (req_x - self.x).abs <= 1 && (req_y - self.y).abs <= 1
 
