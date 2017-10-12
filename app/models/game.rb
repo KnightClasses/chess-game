@@ -99,19 +99,54 @@ class Game < ApplicationRecord
     right = king.x + 1
     bottom = king.y - 1
     top = king.y + 1
+    adjustments = game.threatening_pieces_directional_adjustment?(color)
 
     (left..right).each do |row|
       (bottom..top).each do |column|
         # if moving to the spot is valid,
          if king.is_valid?(row, column) && !king.same_team?(row, column) && !king.off_board?(row, column)
           # and if moving to any of the spots results in NOT being in check,
+          # check that the spot is not one cell beyond the king on the capture path of the threat
           if !king.check?(row, column)
-            return true ## king can safely move there
+            adjustments.each do |adjustment|
+              # if it is, then moving to that spot would still result in checkmate
+              if [row, column] == [adjustment[0] + king.x, adjustment[1] + king.y]
+                return false
+              end
+            end
+            return true
           end
         end
       end
     end
     return false ## no such safe spot exists for the king to move itself to
+  end
+
+  def threatening_pieces_directional_adjustment?(color)
+    king = self.pieces.find_by(type: "King", color: color)
+    threatening_pieces = threatening_pieces?(color)
+    directional_adjustment = []
+
+    threatening_pieces.each do |threatening_piece|
+      if threatening_piece.x == king.x && threatening_piece.y < king.y ## king is to the north of threat
+        directional_adjustment << [0, 1]
+      elsif threatening_piece.x < king.x && threatening_piece.y == king.y ## king is to the east of threat
+        directional_adjustment << [1, 0]
+      elsif threatening_piece.x == king.x && threatening_piece.y > king.y ## king is to the south of threat
+        directional_adjustment << [0, -1]
+      elsif threatening_piece.x > king.x && threatening_piece.y == king.y ## king is to the west of threat
+        directional_adjustment << [-1, 0]
+      elsif threatening_piece.x < king.x && threatening_piece.y < king.y ## king is to the northeast of threat
+        directional_adjustment << [1, 1]
+      elsif threatening_piece.x < king.x && threatening_piece.y > king.y ## king is to the southeast of threat
+        directional_adjustment << [1, -1]
+      elsif threatening_piece.x > king.x && threatening_piece.y > king.y ## king is to the southwest of threat
+        directional_adjustment << [-1, -1]
+      elsif threatening_piece.x > king.x && threatening_piece.y < king.y ## king is to the northwest of threat
+        directional_adjustment << [-1, 1]
+      end
+    end
+    directional_adjustment
   end
 
   def threatening_pieces?(color) ## finds all pieces that are holding the king(color) in check
@@ -132,33 +167,6 @@ class Game < ApplicationRecord
       end
     end
     return threatening_pieces
-  end
-
-  def threatening_pieces_directional_adjustment?(color)
-    king = self.pieces.find_by(type: "King", color: color)
-    threatening_pieces = threatening_pieces?(color)
-    directional_adjustment = []
-
-    threatening_pieces.each do |threatening_piece|
-      if threatening_piece.x == king.x && threatening_piece.y > king.y ## threat is to the north of king
-          directional_adjustment << [0, 1]
-      elsif threatening_piece.x > king.x && threatening_piece.y == king.y ## threat is to the east of king
-        directional_adjustment << [1, 0]
-      elsif threatening_piece.x == king.x && threatening_piece.y < king.y ## threat is to the south of king
-        directional_adjustment << [0, -1]
-      elsif threatening_piece.x < king.x && threatening_piece.y == king.y ## threat is to the west of king
-        directional_adjustment << [-1, 0]
-      elsif threatening_piece.x > king.x && threatening_piece.y > king.y ## threat is to the northeast of king
-        directional_adjustment << [1, 1]
-      elsif threatening_piece.x > king.x && threatening_piece.y < king.y ## threat is to the southeast of king
-        directional_adjustment << [1, -1]
-      elsif threatening_piece.x < king.x && threatening_piece.y < king.y ## threat is to the southwest of king
-        directional_adjustment << [-1, -1]
-      elsif threatening_piece.x < king.x && threatening_piece.y > king.y ## threat is to the northwest of king
-        directional_adjustment << [-1, 1]
-      end
-    end
-    directional_adjustment
   end
 
   def threatening_piece_may_be_captured_by_teammate?(color)
