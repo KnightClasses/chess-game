@@ -1,9 +1,4 @@
 class King < Piece
-  #method for this to use
-  def check
-    return "This is the king"
-  end
-
 
   def is_valid?(req_x, req_y)
 #   return false if self.check?(req_x,req_y)
@@ -20,6 +15,7 @@ class King < Piece
   end
 
   def can_castle?(req_x, req_y)
+    return false if self.check?
     #returns true if unmoved
     return false if req_x != 7 && req_x != 3
     return false if req_y != self.y
