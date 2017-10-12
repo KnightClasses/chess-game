@@ -81,10 +81,10 @@ class Game < ApplicationRecord
     if king.check?
       return false if (
         player_turn_color == color &&
-        threatening_pieces?(color).count == 1 &&
         (king_can_move_and_prevent_checkmate?(color) ||
-        threatening_piece_may_be_captured_by_teammate?(color) ||
-        threatening_piece_may_be_blocked_by_teammate?(color) ) )
+        (threatening_pieces?(color).count == 1 &&
+        (threatening_piece_may_be_blocked_by_teammate?(color) ||
+        (threatening_piece_may_be_captured_by_teammate?(color) ) ) ) ) )
       return true
     end
   end
