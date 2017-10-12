@@ -6,23 +6,17 @@ class Piece < ApplicationRecord
   # req_x and req_y are coordinates/integers
   def is_obstructed?(req_x, req_y)
     if self.x == req_x # vertical
-      h = self.x
-      j = self.y
-      k = req_y
       if self.y < req_y # up
-        return true if game.pieces.where("x = ? AND y > ? AND y < ?", h, j, k).present?
+        return true if game.pieces.where("x = ? AND y > ? AND y < ?", self.x, self.y, req_y).present?
       else # down
-        return true if game.pieces.where("x = ? AND y < ? AND y > ?", h, j, k).present?
+        return true if game.pieces.where("x = ? AND y < ? AND y > ?", self.x, self.y, req_y).present?
       end
 
     elsif self.y == req_y # horizontal
-      h = self.y
-      j = self.x
-      k = req_x
       if self.x < req_x # to right
-        return true if game.pieces.where("y = ? AND x > ? AND x < ?", h, j, k).present?
+        return true if game.pieces.where("y = ? AND x > ? AND x < ?", self.y, self.x, req_x).present?
       else # to left
-        return true if game.pieces.where("y = ? AND x < ? AND x > ?", h, j, k).present?
+        return true if game.pieces.where("y = ? AND x < ? AND x > ?", self.y, self.x, req_x).present?
       end
 
     elsif (self.x - req_x).abs == (self.y - req_y).abs # diagonal
