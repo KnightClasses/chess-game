@@ -36,8 +36,12 @@
    margin: 25px 0px;
  }
 
+ .turn-indicator {
+   text-align: center;
+ }
+
 .board {
-  border: 5px solid black;
+  border: 5px solid grey;
   width: 810px;
   height: 810px;
   position: relative;
@@ -59,10 +63,29 @@
   border: 5px outset transparent;
 }
 
-.captured-pieces {
-  width: 300px;
-  height: 300px;
+.right-console {
+  margin-top: 215px;
+  border-left: 1px #d3d3d3 solid;
+  text-align: center;
+}
+
+.player-console {
   background-color: #d3d3d3;
+  padding: 20px;
+  margin-bottom: 10px;
+  height: 400px;
+  border-radius: 5px;
+}
+
+.captured-pieces {
+  width: 275px;
+  height: 160px;
+  background-color: #d3d3d3;
+  border: 1px #e8e8e8 solid;
+  position: relative;
+  margin: 0 auto 10px;
+  padding: 10px;
+  border-radius: 5px;
 }
 
 .highlight {

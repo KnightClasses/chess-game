@@ -1,8 +1,4 @@
 class Knight < Piece
-  #method for this to use
-  def check
-    return "This is the knight"
-  end
 
   def is_valid?(req_x,req_y)
     #checking if input is off the board

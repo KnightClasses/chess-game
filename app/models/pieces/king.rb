@@ -1,12 +1,6 @@
 class King < Piece
-  #method for this to use
-  def check
-    return "This is the king"
-  end
-
 
   def is_valid?(req_x, req_y)
-    return false if self.check?(req_x,req_y)
     return true if (req_x - self.x).abs == 2 && self.can_castle?(req_x, req_y)
     return true if (req_x - self.x).abs <= 1 && (req_y - self.y).abs <= 1
 
@@ -20,6 +14,7 @@ class King < Piece
   end
 
   def can_castle?(req_x, req_y)
+#    return false if self.check?
     #returns true if unmoved
     return false if req_x != 7 && req_x != 3
     return false if req_y != self.y
@@ -45,12 +40,22 @@ class King < Piece
     #iterate through the opposing pieces for check on the king
     pieces = self.game.find_in_game(color: opposing_color, active: true).to_a
     pieces.each do |piece|
-      if piece.valid_move?(req_x, req_y)
-        return true unless piece.type == 'Pawn' && piece.x == req_x
+      if !piece.is_obstructed?(req_x, req_y) && piece.is_valid?(req_x, req_y)
+        return piece.valid_capture?(req_x, req_y) if piece.type == 'Pawn'
+        return true
       end
     end
     return false
   end
 
+  def in_kings_shadow?(req_x, req_y)
+    king = self
+    game = self.game
+    adjustments = game.threatening_pieces_directional_adjustment?(color)
+    adjustments.each do |adjustment|
+      return true if [req_x, req_y] == [adjustment[0] + king.x, adjustment[1] + king.y]
+    end
+    return false
+  end
 
 end

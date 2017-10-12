@@ -17,6 +17,10 @@ class GamesController < ApplicationController
 
   def show
     @game = Game.find(params[:id])
+    @black_king = @game.pieces.find_by("type = 'King' AND color = 1")
+    @white_king = @game.pieces.find_by("type = 'King' AND color = 0")
+    @pieces_captured_by_black = @game.pieces.where(color: "white", active: false)
+    @pieces_captured_by_white = @game.pieces.where(color: "black", active: false)
   end
 
   def update

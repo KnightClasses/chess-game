@@ -1,16 +1,6 @@
 require 'rails_helper'
 
 RSpec.describe Queen, type: :model do
-  describe "check method on queen should return" do
-    it "should tell us 'this is the queen'" do
-      FactoryGirl.create(:piece, type: Queen)
-      queen1 = Queen.last
-      expected = "This is the queen"
-
-      expect(queen1.check).to eq(expected)
-    end
-  end
-
   describe "Queen#is_valid" do
     it "should tell if the queens move is valid" do
       FactoryGirl.create(:piece, type: Queen)

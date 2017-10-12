@@ -81,17 +81,19 @@ class Game < ApplicationRecord
     if king.check?
       return false if (
         player_turn_color == color &&
-        threatening_pieces?(color).count == 1 &&
         (king_can_move_and_prevent_checkmate?(color) ||
-        threatening_piece_may_be_captured_by_teammate?(color) ||
-        threatening_piece_may_be_blocked_by_teammate?(color) ) )
+        (threatening_pieces?(color).count == 1 &&
+        (threatening_piece_may_be_blocked_by_teammate?(color) ||
+        (threatening_piece_may_be_captured_by_teammate?(color) ) ) ) ) )
       return true
     end
+
+    return false
   end
 
   def king_can_move_and_prevent_checkmate?(color)
     king = self.pieces.find_by(type: "King", color: color)
-
+    game = king.game
     #iterate through all possible moves (8 possible moves in perimeter of king) for a safe spot (no checkmate)
     left = king.x - 1
     right = king.x + 1
@@ -100,16 +102,41 @@ class Game < ApplicationRecord
 
     (left..right).each do |row|
       (bottom..top).each do |column|
-        # if moving to the spot is valid,
-        if king.valid_move?(row, column)
-          # and if moving to any of the spots results in NOT being in check,
-          if !king.check?(row, column)
-            return true ## king can safely move there
-          end
-        end
+        return true if (
+          !king.off_board?(row, column) &&
+          !king.same_team?(row, column) &&
+          !king.check?(row, column) &&
+          !king.in_kings_shadow?(row, column) )
       end
     end
     return false ## no such safe spot exists for the king to move itself to
+  end
+
+  def threatening_pieces_directional_adjustment?(color)
+    king = self.pieces.find_by(type: "King", color: color)
+    threatening_pieces = threatening_pieces?(color)
+    directional_adjustment = []
+
+    threatening_pieces.each do |threatening_piece|
+      if threatening_piece.x == king.x && threatening_piece.y < king.y ## king is to the north of threat
+        directional_adjustment << [0, 1]
+      elsif threatening_piece.x < king.x && threatening_piece.y == king.y ## king is to the east of threat
+        directional_adjustment << [1, 0]
+      elsif threatening_piece.x == king.x && threatening_piece.y > king.y ## king is to the south of threat
+        directional_adjustment << [0, -1]
+      elsif threatening_piece.x > king.x && threatening_piece.y == king.y ## king is to the west of threat
+        directional_adjustment << [-1, 0]
+      elsif threatening_piece.x < king.x && threatening_piece.y < king.y ## king is to the northeast of threat
+        directional_adjustment << [1, 1]
+      elsif threatening_piece.x < king.x && threatening_piece.y > king.y ## king is to the southeast of threat
+        directional_adjustment << [1, -1]
+      elsif threatening_piece.x > king.x && threatening_piece.y > king.y ## king is to the southwest of threat
+        directional_adjustment << [-1, -1]
+      elsif threatening_piece.x > king.x && threatening_piece.y < king.y ## king is to the northwest of threat
+        directional_adjustment << [-1, 1]
+      end
+    end
+    directional_adjustment
   end
 
   def threatening_pieces?(color) ## finds all pieces that are holding the king(color) in check
@@ -163,7 +190,11 @@ class Game < ApplicationRecord
       threatening_piece.capture_path.values.each do |path|
 
         # find which path the king is on
-        king_is_on_this_path = path if path.include?([king.x, king.y])
+        if path.include?([king.x, king.y])
+          king_is_on_this_path = path
+        else
+          next
+        end
 
         # go through each of pieces on your own team
         teammate_pieces.each do |teammate_piece|
@@ -176,9 +207,12 @@ class Game < ApplicationRecord
           end
         end
 
-        # the threat can not be blocked
+        # the threat cannot be blocked
         return false
       end
     end
+
+    # there are more than 1 threatening pieces
+    return false
   end
 end
