@@ -109,8 +109,8 @@ class Piece < ApplicationRecord
     return true if req_x < 1 || req_x > 8 || req_y < 1 || req_y > 8
   end
 
-  def move_results_in_check?(req_x, req_y)
-    return true if game.pieces.find_by(type: "King", color: color)
+  def move_results_in_check?
+    return true if game.pieces.find_by(type: "King", color: color).check?
   end
 
   def valid_move?(req_x, req_y)
