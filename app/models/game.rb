@@ -87,9 +87,8 @@ class Game < ApplicationRecord
       return false if (
         player_turn_color == color &&
         (king_can_move_and_prevent_checkmate?(color) ||
-        (threatening_pieces?(color).count == 1 &&
         (threatening_piece_may_be_blocked_by_teammate?(color) ||
-        (threatening_piece_may_be_captured_by_teammate?(color) ) ) ) ) )
+        (threatening_piece_may_be_captured_by_teammate?(color) ) ) ) )
       return true
     end
 
@@ -165,58 +164,85 @@ class Game < ApplicationRecord
   end
 
   def threatening_piece_may_be_captured_by_teammate?(color)
+
+    # if there is more than 1 threatening piece, it doesn't matter if you can capture one of them
+    # because the other one(s) can capture the king on the next move
+    return false if threatening_pieces?(color).count > 1
+
     king = find_king_in_game_by_color(color)
     game = king.game
     pieces = king.game.find_in_game(color: color, active: true).to_a
-    threatening_pieces = threatening_pieces?(color)
+    threatening_piece = threatening_pieces?(color)[0]
 
-    threatening_pieces.each do |threatening_piece|
-      pieces.each do |piece|
-        if piece.valid_move?(threatening_piece.x, threatening_piece.y)
-          return true
-        end
+    pieces.each do |piece|
+      if piece.valid_move?(threatening_piece.x, threatening_piece.y)
+        return true
       end
     end
     return false
   end
 
   def threatening_piece_may_be_blocked_by_teammate?(color)
-    threatening_pieces = threatening_pieces?(color)
-    king = find_king_in_game_by_color(color)
-    teammate_pieces = self.pieces.where(color: color, active: true).where.not(type: "King").to_a
 
     # if there is more than 1 threatening piece, it doesn't matter if you can block one of them
     # because the other one(s) can capture the king on the next move
-    if threatening_pieces.length == 1
-      threatening_piece = threatening_pieces[0]
+    return false if threatening_pieces?(color).count > 1
 
-      # check each capture path for this threatening piece
-      threatening_piece.capture_path.values.each do |path|
+    king = find_king_in_game_by_color(color)
+    teammate_pieces = self.pieces.where(color: color, active: true).where.not(type: "King").to_a
+    threatening_piece = threatening_pieces?(color)[0]
 
-        # find which path the king is on
-        if path.include?([king.x, king.y])
-          king_is_on_this_path = path
-        else
-          next
+    # check each capture path for this threatening piece
+    threatening_piece.capture_path.values.each do |path|
+
+      # find which path the king is on
+      if path.include?([king.x, king.y])
+        king_is_on_this_path = path
+      else
+        next
+      end
+
+      # go through each of pieces on your own team
+      teammate_pieces.each do |teammate_piece|
+
+        # go through each of the cells between the threatening piece and the king
+        king_is_on_this_path.each do |cell|
+
+          # if a teammate piece may move to any of the cells along this path, the threat CAN be BLOCKED
+          return true if teammate_piece.valid_move?(cell[0], cell[1])
         end
+      end
 
-        # go through each of pieces on your own team
-        teammate_pieces.each do |teammate_piece|
+      # the threat cannot be blocked
+      return false
+    end
+  end
 
-          # go through each of the cells between the threatening piece and the king
-          king_is_on_this_path.each do |cell|
+  def threatening_pieces_directional_adjustment?(color)
+    king = find_king_in_game_by_color(color)
+    threatening_pieces = threatening_pieces?(color)
+    directional_adjustment = []
 
-            # if a teammate piece may move to any of the cells along this path, the threat CAN be BLOCKED
-            return true if teammate_piece.valid_move?(cell[0], cell[1])
-          end
-        end
-
-        # the threat cannot be blocked
-        return false
+    threatening_pieces.each do |threatening_piece|
+      if threatening_piece.x == king.x && threatening_piece.y < king.y ## king is to the north of threat
+        directional_adjustment << [0, 1]
+      elsif threatening_piece.x < king.x && threatening_piece.y == king.y ## king is to the east of threat
+        directional_adjustment << [1, 0]
+      elsif threatening_piece.x == king.x && threatening_piece.y > king.y ## king is to the south of threat
+        directional_adjustment << [0, -1]
+      elsif threatening_piece.x > king.x && threatening_piece.y == king.y ## king is to the west of threat
+        directional_adjustment << [-1, 0]
+      elsif threatening_piece.x < king.x && threatening_piece.y < king.y ## king is to the northeast of threat
+        directional_adjustment << [1, 1]
+      elsif threatening_piece.x < king.x && threatening_piece.y > king.y ## king is to the southeast of threat
+        directional_adjustment << [1, -1]
+      elsif threatening_piece.x > king.x && threatening_piece.y > king.y ## king is to the southwest of threat
+        directional_adjustment << [-1, -1]
+      elsif threatening_piece.x > king.x && threatening_piece.y < king.y ## king is to the northwest of threat
+        directional_adjustment << [-1, 1]
       end
     end
-
-    # there are more than 1 threatening pieces
-    return false
+    directional_adjustment
   end
+
 end

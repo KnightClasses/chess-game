@@ -49,11 +49,10 @@ class King < Piece
   end
 
   def in_kings_shadow?(req_x, req_y)
-    king = self
     game = self.game
     adjustments = game.threatening_pieces_directional_adjustment?(color)
     adjustments.each do |adjustment|
-      return true if [req_x, req_y] == [adjustment[0] + king.x, adjustment[1] + king.y]
+      return true if [req_x, req_y] == [adjustment[0] + self.x, adjustment[1] + self.y]
     end
     return false
   end
