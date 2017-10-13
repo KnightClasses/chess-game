@@ -16,19 +16,19 @@ class Piece < ApplicationRecord
     elsif self.requested_position_west(req_x, req_y)
         return true if game.pieces.where("y = ? AND x < ? AND x > ?", self.y, self.x, req_x).present?
     elsif self.requested_position_northeast(req_x, req_y)
-      return true if search_for_obstructions_on_diagonal(req_x, req_y)
+      return true if find_obstructions_on_diagonal(req_x, req_y)
     elsif self.requested_position_northwest(req_x, req_y)
-      return true if search_for_obstructions_on_diagonal(req_x, req_y)
+      return true if find_obstructions_on_diagonal(req_x, req_y)
     elsif self.requested_position_southwest(req_x, req_y)
-      return true if search_for_obstructions_on_diagonal(req_x, req_y)
+      return true if find_obstructions_on_diagonal(req_x, req_y)
     else #requested_position_southeast(req_x, req_y)
-      return true if search_for_obstructions_on_diagonal(req_x, req_y)
+      return true if find_obstructions_on_diagonal(req_x, req_y)
     end
 
     return false
   end
 
-  def search_for_obstructions_on_diagonal(req_x, req_y)
+  def find_obstructions_on_diagonal(req_x, req_y)
     i = 1
     j = self.x
     k = self.y
