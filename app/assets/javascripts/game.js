@@ -65,9 +65,11 @@ $(document).ready(function () {
                     }
                   });
                   dfd.resolve();
+                  App.room.speak();
                 });
               });
             } else {
+                App.room.speak();
                 location.reload(true);
                 $(".alert alert-info").html("<%= flash[:notice] %>");
             }
