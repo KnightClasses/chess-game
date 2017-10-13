@@ -41,28 +41,28 @@ RSpec.describe Game, type: :model do
   describe "game#all_from_current_game" do
     it "should return an array of all pieces in the game that match the inputs" do
       game = FactoryGirl.create(:game)
-      pawns = game.find_in_game(type:"Pawn")
+      pawns = game.find_pieces_in_game(type:"Pawn")
 
       expect(pawns.length).to eq(16)
     end
     it "should return an array of all the pieces for the game if no parameters given" do
       game = FactoryGirl.create(:game)
 
-      expect(game.find_in_game.length).to eq(32)
+      expect(game.find_pieces_in_game.length).to eq(32)
     end
   end
 
   describe "game#one_from_current_game" do
     it "should return a single piece from the current game that matches the inputs" do
       game = FactoryGirl.create(:game)
-      white_king = game.find_one_in_game(type:"king",color:"white")
+      white_king = game.find_one_piece_in_game(type:"king",color:"white")
 
       expect(white_king).to eq(Piece.where("game_id = ? AND type = 'King' AND color = 0",game.id).take)
     end
 
     it "should return a single piece from the current game that matches the inputs" do
       game = FactoryGirl.create(:game)
-      white_rook = game.find_one_in_game(type:"rook",color:"white",x:1,y:1)
+      white_rook = game.find_one_piece_in_game(type:"rook",color:"white",x:1,y:1)
 
       expect(white_rook).to eq(Piece.where("game_id = ? AND type = 'Rook' AND color = 0 AND x = 1 AND y = 1",game.id).take)
     end

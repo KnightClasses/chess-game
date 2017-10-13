@@ -19,7 +19,7 @@ class King < Piece
     return false if req_x != 7 && req_x != 3
     return false if req_y != self.y
     castle_rook_x = req_x == 7 ? 8 : 1
-    return true if unmoved(self) && unmoved(self.game.find_one_in_game(x:castle_rook_x,y:self.y,type:'Rook'))
+    return true if unmoved(self) && unmoved(self.game.find_one_piece_in_game(x:castle_rook_x,y:self.y,type:'Rook'))
     #return true if unmoved(self) && unmoved(Piece.where("game_id = ? AND x = ? AND y = ? and type = 'Rook'",self.game_id,castle_rook_x,self.y).take)
     return false
   end
@@ -29,7 +29,7 @@ class King < Piece
       castle_rook_x = req_x == 7 ? 8 : 1
       castle_rook_to_move = req_x == 7 ? 6 : 4
       self.update_attributes(x:req_x)
-      self.game.find_one_in_game(x:castle_rook_x,y:self.y,type:'Rook').update_attributes(x:castle_rook_to_move)
+      self.game.find_one_piece_in_game(x:castle_rook_x,y:self.y,type:'Rook').update_attributes(x:castle_rook_to_move)
       #Piece.where("game_id = ? AND x = ? AND y = ? and type = 'Rook'",self.game_id,castle_rook_x,self.y).take.update_attributes(x:castle_rook_to_move)
     end
   end
@@ -38,7 +38,7 @@ class King < Piece
     opposing_color = self.color == "white" ? "black" : "white"
 
     #iterate through the opposing pieces for check on the king
-    pieces = self.game.find_in_game(color: opposing_color, active: true).to_a
+    pieces = self.game.find_pieces_in_game(color: opposing_color, active: true).to_a
     pieces.each do |piece|
       if !piece.is_obstructed?(req_x, req_y) && piece.is_valid?(req_x, req_y)
         return piece.valid_capture?(req_x, req_y) if piece.type == 'Pawn'

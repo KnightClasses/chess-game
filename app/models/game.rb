@@ -39,7 +39,7 @@ class Game < ApplicationRecord
     Piece.where("game_id = ?",self.id).destroy_all
   end
 
-  def find_in_game(**args)
+  def find_pieces_in_game(**args)
     return self.pieces.where(game_id: self.id) if args == {}
     if args[:type] != nil
       args[:type] = args[:type].capitalize
@@ -50,7 +50,7 @@ class Game < ApplicationRecord
     self.pieces.where(args,game_id:self.id)
   end
 
-  def find_one_in_game(**args)
+  def find_one_piece_in_game(**args)
     return self.pieces.where(game_id: self.id).take if args == {}
     if args[:type] != nil
       args[:type] = args[:type].capitalize
@@ -163,7 +163,7 @@ class Game < ApplicationRecord
     king = self.pieces.find_by(type: "King", color: color)
     game = king.game
     game_id = game.id
-    pieces = king.game.find_in_game(color: color, active: true).to_a
+    pieces = king.game.find_pieces_in_game(color: color, active: true).to_a
     threatening_pieces = threatening_pieces?(color)
 
     threatening_pieces.each do |threatening_piece|
