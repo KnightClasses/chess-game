@@ -61,6 +61,11 @@ class Game < ApplicationRecord
     self.pieces.where(args,game_id:self.id).take
   end
 
+  def find_king_in_game_by_color(color)
+    king = self.pieces.find_by(type: "King", color: color)
+    return king
+  end
+
   def initial_player_turn
     self.update(player_turn: self.white_player_id)
   end
@@ -76,7 +81,7 @@ class Game < ApplicationRecord
   end
 
   def checkmate?(color)
-    king = self.pieces.find_by(type: "King", color: color)
+    king = find_king_in_game_by_color(color)
 
     if king.check?
       return false if (
@@ -92,7 +97,7 @@ class Game < ApplicationRecord
   end
 
   def king_can_move_and_prevent_checkmate?(color)
-    king = self.pieces.find_by(type: "King", color: color)
+    king = find_king_in_game_by_color(color)
     game = king.game
     #iterate through all possible moves (8 possible moves in perimeter of king) for a safe spot (no checkmate)
     left = king.x - 1
@@ -113,7 +118,7 @@ class Game < ApplicationRecord
   end
 
   def threatening_pieces_directional_adjustment?(color)
-    king = self.pieces.find_by(type: "King", color: color)
+    king = find_king_in_game_by_color(color)
     threatening_pieces = threatening_pieces?(color)
     directional_adjustment = []
 
@@ -146,7 +151,7 @@ class Game < ApplicationRecord
       opposing_color = 'white'
     end
 
-    king = self.pieces.find_by(type: "King", color: color)
+    king = find_king_in_game_by_color(color)
     threatening_pieces = []
 
     #iterate through the opposing pieces for check on the king
@@ -160,9 +165,8 @@ class Game < ApplicationRecord
   end
 
   def threatening_piece_may_be_captured_by_teammate?(color)
-    king = self.pieces.find_by(type: "King", color: color)
+    king = find_king_in_game_by_color(color)
     game = king.game
-    game_id = game.id
     pieces = king.game.find_in_game(color: color, active: true).to_a
     threatening_pieces = threatening_pieces?(color)
 
@@ -178,7 +182,7 @@ class Game < ApplicationRecord
 
   def threatening_piece_may_be_blocked_by_teammate?(color)
     threatening_pieces = threatening_pieces?(color)
-    king = self.pieces.find_by(type: "King", color: color)
+    king = find_king_in_game_by_color(color)
     teammate_pieces = self.pieces.where(color: color, active: true).where.not(type: "King").to_a
 
     # if there is more than 1 threatening piece, it doesn't matter if you can block one of them
