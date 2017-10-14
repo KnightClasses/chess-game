@@ -5,67 +5,78 @@ class Piece < ApplicationRecord
 
   # req_x and req_y are coordinates/integers
   def is_obstructed?(req_x, req_y)
-    if self.x == req_x # vertical
-      if self.y < req_y # up
+    return false if self.type == "Knight"
+
+    if self.requested_position_north(req_x, req_y)
         return true if game.pieces.where("x = ? AND y > ? AND y < ?", self.x, self.y, req_y).present?
-      else # down
+    elsif self.requested_position_south(req_x, req_y)
         return true if game.pieces.where("x = ? AND y < ? AND y > ?", self.x, self.y, req_y).present?
-      end
-
-    elsif self.y == req_y # horizontal
-      if self.x < req_x # to right
+    elsif self.requested_position_east(req_x, req_y)
         return true if game.pieces.where("y = ? AND x > ? AND x < ?", self.y, self.x, req_x).present?
-      else # to left
+    elsif self.requested_position_west(req_x, req_y)
         return true if game.pieces.where("y = ? AND x < ? AND x > ?", self.y, self.x, req_x).present?
-      end
-
-    elsif (self.x - req_x).abs == (self.y - req_y).abs # diagonal
-      if self.x < req_x && self.y < req_y # x increasing, y increasing
-        i = 1
-        j = self.x
-        k = self.y
-        while i < (self.x - req_x).abs
-          j += 1
-          k += 1
-          return true if game.pieces.where("x = ? AND y = ?", j, k).present?
-          i += 1
-        end
-      elsif self.x > req_x && self.y < req_y # x decreasing, y increasing
-        i = 1
-        j = self.x
-        k = self.y
-        while i < (self.x - req_x).abs
-          j -= 1
-          k += 1
-          return true if game.pieces.where("x = ? AND y = ?", j, k).present?
-          i += 1
-        end
-      elsif self.x > req_x && self.y > req_y # x decreasing, y decreasing
-        i = 1
-        j = self.x
-        k = self.y
-        while i < (self.x - req_x).abs
-          j -= 1
-          k -= 1
-          return true if game.pieces.where("x = ? AND y = ?", j, k).present?
-          i += 1
-        end
-      else # x increasing, y decreasing
-        i = 1
-        j = self.x
-        k = self.y
-        while i < (self.x - req_x).abs
-          j += 1
-          k -= 1
-          return true if game.pieces.where("x = ? AND y = ?", j, k).present?
-          i += 1
-        end
-      end
-
-    elsif self.type == "Knight"
-      return false
+    elsif self.requested_position_northeast(req_x, req_y)
+      return true if find_obstructions_on_diagonal(req_x, req_y)
+    elsif self.requested_position_northwest(req_x, req_y)
+      return true if find_obstructions_on_diagonal(req_x, req_y)
+    elsif self.requested_position_southwest(req_x, req_y)
+      return true if find_obstructions_on_diagonal(req_x, req_y)
+    else #requested_position_southeast(req_x, req_y)
+      return true if find_obstructions_on_diagonal(req_x, req_y)
     end
 
+    return false
+  end
+
+  def find_obstructions_on_diagonal(req_x, req_y)
+    i = 1
+    j = self.x
+    k = self.y
+    while i < (self.x - req_x).abs
+      j += 1
+      k += 1
+      return true if game.pieces.where("x = ? AND y = ?", j, k).present?
+      i += 1
+    end
+  end
+
+  def requested_position_north(req_x, req_y)
+    return true if (self.x == req_x) && (self.y < req_y)
+    return false
+  end
+
+  def requested_position_south(req_x, req_y)
+    return true if (self.x == req_x) && (self.y > req_y)
+    return false
+  end
+
+  def requested_position_northeast(req_x, req_y)
+    return true if ((self.x - req_x).abs == (self.y - req_y).abs) && (self.x < req_x && self.y < req_y)
+    return false
+  end
+
+  def requested_position_southeast(req_x, req_y)
+    return true if ((self.x - req_x).abs == (self.y - req_y).abs) && (self.x < req_x && self.y > req_y)
+    return false
+  end
+
+  def requested_position_southwest(req_x, req_y)
+    return true if ((self.x - req_x).abs == (self.y - req_y).abs) && (self.x > req_x && self.y > req_y)
+    return false
+  end
+
+  def requested_position_northwest(req_x, req_y)
+    return true if ((self.x - req_x).abs == (self.y - req_y).abs) && (self.x > req_x && self.y < req_y)
+    return false
+  end
+
+  def requested_position_east(req_x, req_y)
+    return true if (self.y == req_y) && (self.x < req_x)
+    return false
+  end
+
+  def requested_position_west(req_x, req_y)
+    return true if (self.y == req_y) && (self.x > req_x)
     return false
   end
 
