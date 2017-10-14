@@ -137,7 +137,7 @@ class Game < ApplicationRecord
     return false if threatening_pieces?(color).count > 1
 
     king = self.pieces.find_by(type: "King", color: color)
-    pieces = king.game.find_in_game(color: color, active: true).to_a
+    pieces = king.game.find_pieces_in_game(color: color, active: true).to_a
     threatening_piece = threatening_pieces?(color)[0]
 
     pieces.each do |piece|
