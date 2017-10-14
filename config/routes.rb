@@ -9,4 +9,6 @@ Rails.application.routes.draw do
   resources :games do
     patch :active, on: :member
   end
+
+  mount ActionCable.server => '/cable'
 end
