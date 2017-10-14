@@ -61,6 +61,11 @@ class Game < ApplicationRecord
     self.pieces.where(args,game_id:self.id).take
   end
 
+  def find_king_in_game_by_color(color)
+    king = self.pieces.find_by(type: "King", color: color)
+    return king
+  end
+
   def initial_player_turn
     self.update(player_turn: self.white_player_id)
   end
@@ -76,7 +81,7 @@ class Game < ApplicationRecord
   end
 
   def checkmate?(color)
-    king = self.pieces.find_by(type: "King", color: color)
+    king = find_king_in_game_by_color(color)
 
     if king.check?
       return false if (
@@ -91,7 +96,7 @@ class Game < ApplicationRecord
   end
 
   def king_can_move_and_prevent_checkmate?(color)
-    king = self.pieces.find_by(type: "King", color: color)
+    king = find_king_in_game_by_color(color)
     game = king.game
     #iterate through all possible moves (8 possible moves in perimeter of king) for a safe spot (no checkmate)
     left = king.x - 1
@@ -111,6 +116,33 @@ class Game < ApplicationRecord
     return false ## no such safe spot exists for the king to move itself to
   end
 
+  def threatening_pieces_directional_adjustment?(color)
+    king = find_king_in_game_by_color(color)
+    threatening_pieces = threatening_pieces?(color)
+    directional_adjustment = []
+
+    threatening_pieces.each do |threatening_piece|
+      if threatening_piece.x == king.x && threatening_piece.y < king.y ## king is to the north of threat
+        directional_adjustment << [0, 1]
+      elsif threatening_piece.x < king.x && threatening_piece.y == king.y ## king is to the east of threat
+        directional_adjustment << [1, 0]
+      elsif threatening_piece.x == king.x && threatening_piece.y > king.y ## king is to the south of threat
+        directional_adjustment << [0, -1]
+      elsif threatening_piece.x > king.x && threatening_piece.y == king.y ## king is to the west of threat
+        directional_adjustment << [-1, 0]
+      elsif threatening_piece.x < king.x && threatening_piece.y < king.y ## king is to the northeast of threat
+        directional_adjustment << [1, 1]
+      elsif threatening_piece.x < king.x && threatening_piece.y > king.y ## king is to the southeast of threat
+        directional_adjustment << [1, -1]
+      elsif threatening_piece.x > king.x && threatening_piece.y > king.y ## king is to the southwest of threat
+        directional_adjustment << [-1, -1]
+      elsif threatening_piece.x > king.x && threatening_piece.y < king.y ## king is to the northwest of threat
+        directional_adjustment << [-1, 1]
+      end
+    end
+    directional_adjustment
+  end
+
   def threatening_pieces?(color) ## finds all pieces that are holding the king(color) in check
     if color == 'white'
       opposing_color = 'black'
@@ -118,7 +150,7 @@ class Game < ApplicationRecord
       opposing_color = 'white'
     end
 
-    king = self.pieces.find_by(type: "King", color: color)
+    king = find_king_in_game_by_color(color)
     threatening_pieces = []
 
     #iterate through the opposing pieces for check on the king
@@ -132,6 +164,7 @@ class Game < ApplicationRecord
   end
 
   def threatening_piece_may_be_captured_by_teammate?(color)
+
     # if there is more than 1 threatening piece, it doesn't matter if you can capture one of them
     # because the other one(s) can capture the king on the next move
     return false if threatening_pieces?(color).count > 1
@@ -149,11 +182,12 @@ class Game < ApplicationRecord
   end
 
   def threatening_piece_may_be_blocked_by_teammate?(color)
+
     # if there is more than 1 threatening piece, it doesn't matter if you can block one of them
     # because the other one(s) can capture the king on the next move
     return false if threatening_pieces?(color).count > 1
 
-    king = self.pieces.find_by(type: "King", color: color)
+    king = find_king_in_game_by_color(color)
     teammate_pieces = self.pieces.where(color: color, active: true).where.not(type: "King").to_a
     threatening_piece = threatening_pieces?(color)[0]
 
@@ -184,7 +218,7 @@ class Game < ApplicationRecord
   end
 
   def threatening_pieces_directional_adjustment?(color)
-    king = self.pieces.find_by(type: "King", color: color)
+    king = find_king_in_game_by_color(color)
     threatening_pieces = threatening_pieces?(color)
     directional_adjustment = []
 
