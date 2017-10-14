@@ -116,33 +116,6 @@ class Game < ApplicationRecord
     return false ## no such safe spot exists for the king to move itself to
   end
 
-  def threatening_pieces_directional_adjustment?(color)
-    king = find_king_in_game_by_color(color)
-    threatening_pieces = threatening_pieces?(color)
-    directional_adjustment = []
-
-    threatening_pieces.each do |threatening_piece|
-      if threatening_piece.x == king.x && threatening_piece.y < king.y ## king is to the north of threat
-        directional_adjustment << [0, 1]
-      elsif threatening_piece.x < king.x && threatening_piece.y == king.y ## king is to the east of threat
-        directional_adjustment << [1, 0]
-      elsif threatening_piece.x == king.x && threatening_piece.y > king.y ## king is to the south of threat
-        directional_adjustment << [0, -1]
-      elsif threatening_piece.x > king.x && threatening_piece.y == king.y ## king is to the west of threat
-        directional_adjustment << [-1, 0]
-      elsif threatening_piece.x < king.x && threatening_piece.y < king.y ## king is to the northeast of threat
-        directional_adjustment << [1, 1]
-      elsif threatening_piece.x < king.x && threatening_piece.y > king.y ## king is to the southeast of threat
-        directional_adjustment << [1, -1]
-      elsif threatening_piece.x > king.x && threatening_piece.y > king.y ## king is to the southwest of threat
-        directional_adjustment << [-1, -1]
-      elsif threatening_piece.x > king.x && threatening_piece.y < king.y ## king is to the northwest of threat
-        directional_adjustment << [-1, 1]
-      end
-    end
-    directional_adjustment
-  end
-
   def threatening_pieces?(color) ## finds all pieces that are holding the king(color) in check
     if color == 'white'
       opposing_color = 'black'
