@@ -100,7 +100,7 @@ RSpec.describe King, type: :model do
       game.clear_current_board
       FactoryGirl.create(:piece,x:4,y:1,active:true,game_id:game.id)
       FactoryGirl.create(:piece,type:Rook,active:true,color:1,x:5,y:8,game_id:game.id)
-      king = game.find_one_in_game(x:4,y:1)
+      king = game.find_one_piece_in_game(x:4,y:1)
       
       expect(king.check?(5,1)).to eq(true)
     end
@@ -109,7 +109,7 @@ RSpec.describe King, type: :model do
       game.clear_current_board
       FactoryGirl.create(:piece,x:5,y:1,game_id:game.id)
       FactoryGirl.create(:piece,type:Rook,color:1,x:5,y:8,game_id:game.id)
-      king = game.find_one_in_game(x:5,y:1)
+      king = game.find_one_piece_in_game(x:5,y:1)
       
       expect(king.check?).to eq(true)
     end
@@ -118,7 +118,7 @@ RSpec.describe King, type: :model do
       game.clear_current_board
       FactoryGirl.create(:piece,x:4,y:1,game_id:game.id)
       FactoryGirl.create(:piece,type:Rook,color:1,x:5,y:8,game_id:game.id)
-      king = game.find_one_in_game(x:4,y:1)
+      king = game.find_one_piece_in_game(x:4,y:1)
       
       expect(king.check?).to eq(false)
     end
@@ -127,7 +127,7 @@ RSpec.describe King, type: :model do
       game.clear_current_board
       FactoryGirl.create(:piece,x:6,y:1,active:true,game_id:game.id)
       FactoryGirl.create(:piece,active:true,type:Rook,color:1,x:5,y:8,game_id:game.id)
-      king = game.find_one_in_game(x:6,y:1)
+      king = game.find_one_piece_in_game(x:6,y:1)
       
       expect(king.check?(7,1)).to eq(false)
     end

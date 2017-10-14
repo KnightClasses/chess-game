@@ -102,7 +102,7 @@ class Piece < ApplicationRecord
   end
 
   def same_team?(req_x, req_y)
-    blocking_piece = self.game.find_one_in_game(x:req_x,y:req_y)
+    blocking_piece = self.game.find_one_piece_in_game(x:req_x,y:req_y)
     #blocking_piece = game.pieces.find_by("x = ? AND y = ?", req_x, req_y)
     return self.color == blocking_piece.color if blocking_piece
   end

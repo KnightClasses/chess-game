@@ -39,7 +39,7 @@ class Game < ApplicationRecord
     Piece.where("game_id = ?",self.id).destroy_all
   end
 
-  def find_in_game(**args)
+  def find_pieces_in_game(**args)
     return self.pieces.where(game_id: self.id) if args == {}
     if args[:type] != nil
       args[:type] = args[:type].capitalize
@@ -50,7 +50,7 @@ class Game < ApplicationRecord
     self.pieces.where(args,game_id:self.id)
   end
 
-  def find_one_in_game(**args)
+  def find_one_piece_in_game(**args)
     return self.pieces.where(game_id: self.id).take if args == {}
     if args[:type] != nil
       args[:type] = args[:type].capitalize
@@ -169,9 +169,8 @@ class Game < ApplicationRecord
     # because the other one(s) can capture the king on the next move
     return false if threatening_pieces?(color).count > 1
 
-    king = find_king_in_game_by_color(color)
-    game = king.game
-    pieces = king.game.find_in_game(color: color, active: true).to_a
+    king = self.pieces.find_by(type: "King", color: color)
+    pieces = king.game.find_pieces_in_game(color: color, active: true).to_a
     threatening_piece = threatening_pieces?(color)[0]
 
     pieces.each do |piece|
